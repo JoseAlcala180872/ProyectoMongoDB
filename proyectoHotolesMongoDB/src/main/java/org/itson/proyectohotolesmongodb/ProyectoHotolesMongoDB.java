@@ -11,6 +11,7 @@ package org.itson.proyectohotolesmongodb;
 public class ProyectoHotolesMongoDB {
 
     public static void main(String[] args) {
-        
+        Conexion conex = new Conexion();
+        conex.crearConexion();
     }
 }
