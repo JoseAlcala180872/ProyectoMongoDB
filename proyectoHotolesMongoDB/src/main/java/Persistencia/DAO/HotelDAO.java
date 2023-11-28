@@ -4,16 +4,20 @@
  */
 package Persistencia.DAO;
 
+import Dominio.Hotel;
 import Persistencia.Conexion.Conexion;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import Persistencia.Interfaces.IHotelDAO;
+import Excepciones.PersistenciaException;
+import org.bson.types.ObjectId;
 
 /**
  *
  * @author TADEO
  */
-public class HotelDAO {
+public class HotelDAO implements IHotelDAO{
     MongoDatabase baseDatos;
     MongoCollection<Document> coleccion;
 
@@ -22,14 +26,65 @@ public class HotelDAO {
         this.coleccion = baseDatos.getCollection("hotel");
     }
 
-    public void insertar(){
-        Document hotel = new Document();
+    
+    /**
+     * 
+     * @param hotel 
+     * @throws Excepciones.PersistenciaException 
+     */
+    @Override
+    public void insertar(Hotel insertarHotel) throws PersistenciaException{
+        
+        Document hotelDocument = new Document();
+        try{
+            hotelDocument.append("nombre", insertarHotel.getNombre())
+                .append("direccion", insertarHotel.getDireccion())
+                .append("telefono", insertarHotel.getTelefono())
+                .append("añoConstruccion", insertarHotel.getAñoConstruccion())
+                .append("_id", insertarHotel.getCategoria().getId());
 
-        hotel.append("nombre", "")
-                .append("direccion", "mamamam")
-                .append("telefono", "asdf")
-                .append("añoConstruccion", 1234);
+            coleccion.insertOne(hotelDocument);
+        }catch(Exception e){
+            
+        }
+        
+        
+    }
 
-        coleccion.insertOne(hotel);
+    /**
+     * 
+     * @param actualizarHotel
+     */
+    @Override
+    public void actualizar(Hotel actualizarHotel) {
+        Document filtro = new Document("_id", new ObjectId(actualizarHotel.getId()));
+        
+        try{ 
+            Document hotelDocument = new Document()
+                .append("nombre", actualizarHotel.getNombre())
+                .append("direccion", actualizarHotel.getDireccion())
+                .append("telefono", actualizarHotel.getTelefono())
+                .append("añoConstruccion", actualizarHotel.getAñoConstruccion())
+                .append("_id", actualizarHotel.getCategoria().getId());
+
+            coleccion.replaceOne(filtro, hotelDocument);
+        }catch (Exception e){
+            
+        }
+    }
+
+    /**
+     * 
+     * @param eliminarHotel
+     */
+    @Override
+    public void eliminar(Hotel eliminarHotel) throws PersistenciaException{
+        Document filtro = new Document("_id", new ObjectId(eliminarHotel.getId()));
+        
+        try{
+            coleccion.deleteOne(filtro);
+        }catch(Exception e){
+            
+        }
     }
 }

@@ -16,6 +16,6 @@ public class ProyectoHotolesMongoDB {
 
     public static void main(String[] args) {
         HotelDAO hotel = new HotelDAO();
-        hotel.insertar();
+       
     }
 }
