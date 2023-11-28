@@ -4,6 +4,10 @@
 
 package org.itson.proyectohotolesmongodb;
 
+import Persistencia.Conexion.Conexion;
+import Persistencia.DAO.HotelDAO;
+
+
 /**
  *
  * @author José Carlos Alcalá Ruíz 180872
@@ -11,7 +15,7 @@ package org.itson.proyectohotolesmongodb;
 public class ProyectoHotolesMongoDB {
 
     public static void main(String[] args) {
-        Conexion conex = new Conexion();
-        conex.crearConexion();
+        HotelDAO hotel = new HotelDAO();
+        hotel.insertar();
     }
 }
