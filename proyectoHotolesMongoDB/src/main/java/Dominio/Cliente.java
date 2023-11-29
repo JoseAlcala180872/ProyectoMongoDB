@@ -6,58 +6,38 @@ package Dominio;
 import org.bson.types.ObjectId;
 /**
  *
- * @author 
+ * @author marcos_zr
  */
-public class Hotel {
-    
+public class Cliente {
     private ObjectId _id;
     private String nombre;
     private String direccion;
     private String telefono;
-    private String añoConstruccion;
-    private Categoria categoria;
-            
+
+    public Cliente(){
+        
+    }
+    
     /**
      * 
-     */       
-    public Hotel(){
-       
-    }
-
-    /**
-     *
      * @param _id
      * @param nombre
      * @param direccion
-     * @param telefono
-     * @param añoConstruccion
-     * @param categoria 
+     * @param telefono 
      */
-    public Hotel(ObjectId _id, String nombre, String direccion, String telefono, String añoConstruccion, Categoria categoria) {
+    public Cliente(ObjectId _id, String nombre, String direccion, String telefono) {
         this._id = _id;
         this.nombre = nombre;
         this.direccion = direccion;
         this.telefono = telefono;
-        this.añoConstruccion = añoConstruccion;
-        this.categoria = categoria;
     }
-
-    /**
-     * 
-     * @param nombre
-     * @param direccion
-     * @param telefono
-     * @param añoConstruccion
-     * @param categoria 
-     */
-    public Hotel(String nombre, String direccion, String telefono, String añoConstruccion, Categoria categoria) {
+    
+    public Cliente(String nombre, String direccion, String telefono) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.telefono = telefono;
-        this.añoConstruccion = añoConstruccion;
-        this.categoria = categoria;
     }
-    
+
     public ObjectId getId() {
         return _id;
     }
@@ -89,22 +69,7 @@ public class Hotel {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-
-    public String getAñoConstruccion() {
-        return añoConstruccion;
-    }
-
-    public void setAñoConstruccion(String añoConstruccion) {
-        this.añoConstruccion = añoConstruccion;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
+    
     
     
 }

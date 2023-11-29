@@ -11,6 +11,9 @@ import Dominio.Categoria;
 import Persistencia.Interfaces.ICategoriaDAO;
 import Excepciones.PersistenciaException;
 import org.bson.types.ObjectId;
+import org.bson.conversions.Bson;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.UpdateResult;
 
 /**
  *
@@ -41,7 +44,7 @@ public class CategoriaDAO implements ICategoriaDAO{
 
             coleccion.insertOne(categoriaDocument);
         }catch (Exception e){
-            
+            throw new PersistenciaException("Error al insertar categoria:" + e.getMessage());
         }
         
         return insertarCategoria;
@@ -56,17 +59,19 @@ public class CategoriaDAO implements ICategoriaDAO{
      */
     @Override
     public Categoria actualizar(Categoria actualizarCategoria) throws PersistenciaException{
-        Document filtro = new Document("_id", new ObjectId(actualizarCategoria.getId()));
+        Bson filtro = Filters.eq("_id", actualizarCategoria.getId());
         
         try{
             Document categoriaDocument = new Document()
                 .append("estrellas", actualizarCategoria.getEstrellas())
                 .append("iva", actualizarCategoria.getIva());
-
-            coleccion.replaceOne(filtro, categoriaDocument);
+            
+            Document actualizacion = new Document("$set", categoriaDocument);
+            UpdateResult updateResult = coleccion.updateOne(filtro, actualizacion);
+          
             
         }catch (Exception e){
-            
+            throw new PersistenciaException("Error al buscar categoria:" + e.getMessage());
         }
         
         return actualizarCategoria;
@@ -81,14 +86,63 @@ public class CategoriaDAO implements ICategoriaDAO{
      */
     @Override
     public Categoria eliminar(Categoria eliminarCategoria) throws PersistenciaException{
-        Document filtro = new Document("_id", new ObjectId(eliminarCategoria.getId()));
+        
         try{
+            Document filtro = new Document("_id",eliminarCategoria.getId());
             coleccion.deleteOne(filtro);
-        }catch (Exception e){
-            
+        } catch (Exception e){
+            throw new PersistenciaException("Error al eliminar categoria:" + e.getMessage());
         }
         
         return eliminarCategoria;
+    }
+    
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws PersistenciaException 
+     */
+    @Override
+    public Categoria buscar(ObjectId id) throws PersistenciaException{
+        
+        Document filtro = new Document("_id", id);
+        
+        try{
+            Document categoria = coleccion.find(filtro).first();
+            
+            return new Categoria(
+                    categoria.getObjectId("_id"),
+                    categoria.getInteger("estrellas"),
+                    categoria.getDouble("iva")
+            );
+        }catch (Exception e){
+            System.out.println("ocurrio un error en:"  + e.getMessage());
+        }
+        
+        return null;
+        
+    }
+    
+    @Override
+    public Categoria buscar(int estrellas) throws PersistenciaException{
+        
+        Document filtro = new Document("estrellas", estrellas);
+        
+        try{
+            Document categoria = coleccion.find(filtro).first();
+            
+            return new Categoria(
+                    categoria.getObjectId("_id"),
+                    categoria.getInteger("estrellas"),
+                    categoria.getDouble("iva")
+            );
+        }catch (Exception e){
+            System.out.println("ocurrio un error en:"  + e.getMessage());
+        }
+        
+        return null;
+        
     }
     
 }

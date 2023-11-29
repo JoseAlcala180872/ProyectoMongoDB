@@ -11,9 +11,9 @@ import org.bson.types.ObjectId;
  */
 public class Categoria {
     
-    private String _id;
+    private ObjectId _id;
     private int  estrellas;
-    private float iva;
+    private double iva;
     
     /**
      * 
@@ -28,17 +28,22 @@ public class Categoria {
      * @param estrellas
      * @param iva 
      */
-    public Categoria(String _id, int estrellas, float iva) {
+    public Categoria(ObjectId _id, int estrellas, double iva) {
         this._id = _id;
         this.estrellas = estrellas;
         this.iva = iva;
     }
+    
+    public Categoria(int estrellas, double iva){
+        this.estrellas = estrellas;
+        this.iva = iva;
+    }
 
-    public String getId() {
+    public ObjectId getId() {
         return _id;
     }
 
-    public void setId(String _id) {
+    public void setId(ObjectId _id) {
         this._id = _id;
     }
 
@@ -50,11 +55,11 @@ public class Categoria {
         this.estrellas = estrellas;
     }
 
-    public float getIva() {
+    public double getIva() {
         return iva;
     }
 
-    public void setIva(float iva) {
+    public void setIva(double iva) {
         this.iva = iva;
     }
 

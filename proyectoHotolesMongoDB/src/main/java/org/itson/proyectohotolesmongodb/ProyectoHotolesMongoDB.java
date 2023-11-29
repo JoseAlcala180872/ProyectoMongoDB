@@ -5,7 +5,10 @@
 package org.itson.proyectohotolesmongodb;
 
 import Persistencia.Conexion.Conexion;
-import Persistencia.DAO.HotelDAO;
+import Persistencia.DAO.*;
+import Excepciones.PersistenciaException;
+import Dominio.*;
+import org.bson.types.ObjectId;
 
 
 /**
@@ -14,8 +17,11 @@ import Persistencia.DAO.HotelDAO;
  */
 public class ProyectoHotolesMongoDB {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws PersistenciaException {
         HotelDAO hotel = new HotelDAO();
-       
+        Hotel ho;
+     
+        
+        
     }
 }

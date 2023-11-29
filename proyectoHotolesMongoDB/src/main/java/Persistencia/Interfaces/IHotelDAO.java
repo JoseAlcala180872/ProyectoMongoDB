@@ -5,13 +5,15 @@
 package Persistencia.Interfaces;
 import Dominio.Hotel;
 import Excepciones.PersistenciaException;
+import org.bson.types.ObjectId;
 /**
  *
  * @author marcos_zr
  */
 public interface IHotelDAO {
     
-    public void insertar(Hotel hotel) throws PersistenciaException;
-    public void actualizar(Hotel hotel) throws PersistenciaException;
-    public void eliminar(Hotel hotel) throws PersistenciaException;
+    public Hotel insertar(Hotel insertarHotel) throws PersistenciaException;
+    public Hotel actualizar(Hotel actualizarHotel) throws PersistenciaException;
+    public Hotel eliminar(Hotel eliminarHotel) throws PersistenciaException;
+    public Hotel buscar(ObjectId id) throws PersistenciaException;
 }
