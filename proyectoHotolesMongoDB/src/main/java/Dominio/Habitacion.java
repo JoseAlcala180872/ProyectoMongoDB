@@ -7,16 +7,16 @@ import org.bson.types.ObjectId;
 
 /**
  *
- * @author marcos_zr
+ * @author 
  */
 public class Habitacion {
     private ObjectId _id;
     private String tipoHabitacion;
     private int numeroHabitacion;
     private double tarifa;
+    private Hotel hotel;
 
-    public Habitacion(){
-        
+    public Habitacion(){  
     }
     
     /**
@@ -26,11 +26,12 @@ public class Habitacion {
      * @param numeroHabitacion
      * @param tarifa 
      */
-    public Habitacion(ObjectId _id, String tipoHabitacion, int numeroHabitacion, double tarifa) {
+    public Habitacion(ObjectId _id, String tipoHabitacion, int numeroHabitacion, double tarifa, Hotel hotel) {
         this._id = _id;
         this.tipoHabitacion = tipoHabitacion;
         this.numeroHabitacion = numeroHabitacion;
         this.tarifa = tarifa;
+        this.hotel = hotel;
     }
     
     /**
@@ -39,10 +40,11 @@ public class Habitacion {
      * @param numeroHabitacion
      * @param tarifa 
      */
-    public Habitacion(String tipoHabitacion, int numeroHabitacion, double tarifa) {
+    public Habitacion(String tipoHabitacion, int numeroHabitacion, double tarifa, Hotel hotel) {
         this.tipoHabitacion = tipoHabitacion;
         this.numeroHabitacion = numeroHabitacion;
         this.tarifa = tarifa;
+        this.hotel = hotel;
     }
 
     public ObjectId getId() {
@@ -75,6 +77,14 @@ public class Habitacion {
 
     public void setTarifa(double tarifa) {
         this.tarifa = tarifa;
+    }
+
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
     }
     
     

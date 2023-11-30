@@ -124,6 +124,12 @@ public class CategoriaDAO implements ICategoriaDAO{
         
     }
     
+    /**
+     * 
+     * @param estrellas
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Categoria buscar(int estrellas) throws PersistenciaException{
         

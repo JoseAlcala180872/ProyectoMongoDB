@@ -7,7 +7,7 @@ import org.bson.types.ObjectId;
 import java.util.Date;
 /**
  *
- * @author marcos_zr
+ * @author 
  */
 public class Reservacion {
     

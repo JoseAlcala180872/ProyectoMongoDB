@@ -6,7 +6,7 @@ package Dominio;
 import org.bson.types.ObjectId;
 /**
  *
- * @author marcos_zr
+ * @author 
  */
 public class Cliente {
     private ObjectId _id;

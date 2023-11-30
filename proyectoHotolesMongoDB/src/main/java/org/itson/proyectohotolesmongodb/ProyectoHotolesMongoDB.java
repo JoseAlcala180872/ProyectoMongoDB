@@ -8,6 +8,7 @@ import Persistencia.Conexion.Conexion;
 import Persistencia.DAO.*;
 import Excepciones.PersistenciaException;
 import Dominio.*;
+import Persistencia.Interfaces.*;
 import org.bson.types.ObjectId;
 
 
@@ -18,9 +19,10 @@ import org.bson.types.ObjectId;
 public class ProyectoHotolesMongoDB {
 
     public static void main(String[] args) throws PersistenciaException {
-        HotelDAO hotel = new HotelDAO();
-        Hotel ho;
-     
+        IHotelDAO hotelDAO = new HotelDAO();
+        ICategoriaDAO categoriaDAO = new CategoriaDAO();
+        IHabitacionDAO habitacionDAO = new HabitacionDAO();
+        
         
         
     }

@@ -50,7 +50,7 @@ public class HotelDAO implements IHotelDAO{
 
             coleccion.insertOne(hotelDocument);
         }catch(Exception e){
-            
+            throw new PersistenciaException("Error al insertar hotel:" + e.getMessage());
         }
         
         return insertarHotel;
@@ -62,7 +62,7 @@ public class HotelDAO implements IHotelDAO{
      * @return 
      */
     @Override
-    public Hotel actualizar(Hotel actualizarHotel) {
+    public Hotel actualizar(Hotel actualizarHotel) throws PersistenciaException{
         Bson filtro = Filters.eq("_id", actualizarHotel.getId());
         
         try{ 
@@ -77,7 +77,7 @@ public class HotelDAO implements IHotelDAO{
             UpdateResult updateResult = coleccion.updateOne(filtro, actualizacion);
             
         }catch (Exception e){
-            
+            throw new PersistenciaException("Error al actualizar hotel:" + e.getMessage());
         }
         
         return actualizarHotel;
@@ -96,12 +96,18 @@ public class HotelDAO implements IHotelDAO{
         try{
             coleccion.deleteOne(filtro);
         }catch(Exception e){
-            
+            throw new PersistenciaException("Error al eliminar hotel:" + e.getMessage());
         }
         
         return eliminarHotel;
     }
 
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Hotel buscar(ObjectId id) throws PersistenciaException {
         Document filtro = new Document("_id", id);
@@ -123,7 +129,7 @@ public class HotelDAO implements IHotelDAO{
                     hotel.getString("añoConstruccion"),
                     categoria
             );
-        }catch (Exception e){
+        }catch (PersistenciaException e){
             System.out.println("ocurrio un error en:"  + e.getMessage());
         }
         
