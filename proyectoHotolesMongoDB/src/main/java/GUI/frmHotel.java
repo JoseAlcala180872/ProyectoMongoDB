@@ -4,17 +4,62 @@
  */
 package GUI;
 
+import Dominio.Hotel;
+import Excepciones.PersistenciaException;
+import Persistencia.DAO.HotelDAO;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author YeisiPC
  */
 public class frmHotel extends javax.swing.JFrame {
 
+    private final HotelDAO hotelDAO;
+
     /**
      * Creates new form frmHotel
      */
     public frmHotel() {
+
         initComponents();
+        hotelDAO = new HotelDAO(); // Initialize HotelDAO
+        cargarDatosEnTabla();
+    }
+
+    private void cargarDatosEnTabla() {
+        try {
+            // Llamar al método para obtener todos los hoteles
+            List<Hotel> hoteles = hotelDAO.obtenerTodosLosHoteles();
+
+            // Crear un DefaultTableModel con nombres de columnas
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("Nombre");
+            model.addColumn("Dirección");
+            model.addColumn("Teléfono");
+            model.addColumn("Año Construcción");
+            model.addColumn("Categoría");
+
+            // Añadir datos al modelo de tabla
+            for (Hotel hotel : hoteles) {
+                Object[] rowData = new Object[]{
+                    hotel.getNombre(),
+                    hotel.getDireccion(),
+                    hotel.getTelefono(),
+                    hotel.getAñoConstruccion(),
+                    // Comprueba si Categoria es nula antes de acceder a sus métodos
+                    hotel.getCategoria() != null ? hotel.getCategoria().getEstrellas() : "N/A"
+                };
+                model.addRow(rowData);
+            }
+
+            // Establecer el modelo de tabla a la jTableHoteles
+            jTableHoteles.setModel(model);
+        } catch (PersistenciaException e) {
+            // Handle exception (display an error message, log, etc.)
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -28,14 +73,14 @@ public class frmHotel extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableHoteles = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Hoteles");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableHoteles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -46,21 +91,26 @@ public class frmHotel extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTableHoteles);
+        if (jTableHoteles.getColumnModel().getColumnCount() > 0) {
+            jTableHoteles.getColumnModel().getColumn(0).setHeaderValue("Title 1");
+            jTableHoteles.getColumnModel().getColumn(1).setHeaderValue("Title 2");
+            jTableHoteles.getColumnModel().getColumn(2).setHeaderValue("Title 3");
+            jTableHoteles.getColumnModel().getColumn(3).setHeaderValue("Title 4");
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(207, 207, 207)
-                        .addComponent(jLabel1)))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addGap(207, 207, 207)
+                .addComponent(jLabel1)
+                .addContainerGap(213, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -114,6 +164,6 @@ public class frmHotel extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableHoteles;
     // End of variables declaration//GEN-END:variables
 }

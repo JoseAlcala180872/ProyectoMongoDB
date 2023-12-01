@@ -12,8 +12,11 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import Persistencia.Interfaces.IHotelDAO;
 import Excepciones.PersistenciaException;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.UpdateResult;
+import java.util.ArrayList;
+import java.util.List;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
@@ -21,106 +24,106 @@ import org.bson.types.ObjectId;
  *
  * @author TADEO
  */
-public class HotelDAO implements IHotelDAO{
+public class HotelDAO implements IHotelDAO {
+
     MongoDatabase baseDatos;
     MongoCollection<Document> coleccion;
 
-    public HotelDAO(){
+    public HotelDAO() {
         this.baseDatos = Conexion.getConexion();
         this.coleccion = baseDatos.getCollection("hotel");
     }
 
-    
     /**
-     * 
+     *
      * @param insertarHotel
-     * @return 
-     * @throws Excepciones.PersistenciaException 
+     * @return
+     * @throws Excepciones.PersistenciaException
      */
     @Override
-    public Hotel insertar(Hotel insertarHotel) throws PersistenciaException{
-        
+    public Hotel insertar(Hotel insertarHotel) throws PersistenciaException {
+
         Document hotelDocument = new Document();
-        try{
+        try {
             hotelDocument.append("nombre", insertarHotel.getNombre())
-                .append("direccion", insertarHotel.getDireccion())
-                .append("telefono", insertarHotel.getTelefono())
-                .append("añoConstruccion", insertarHotel.getAñoConstruccion())
-                .append("_idCategoria", insertarHotel.getCategoria().getId());
+                    .append("direccion", insertarHotel.getDireccion())
+                    .append("telefono", insertarHotel.getTelefono())
+                    .append("añoConstruccion", insertarHotel.getAñoConstruccion())
+                    .append("_idCategoria", insertarHotel.getCategoria().getId());
 
             coleccion.insertOne(hotelDocument);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new PersistenciaException("Error al insertar hotel:" + e.getMessage());
         }
-        
+
         return insertarHotel;
     }
 
     /**
-     * 
+     *
      * @param actualizarHotel
-     * @return 
+     * @return
      */
     @Override
-    public Hotel actualizar(Hotel actualizarHotel) throws PersistenciaException{
+    public Hotel actualizar(Hotel actualizarHotel) throws PersistenciaException {
         Bson filtro = Filters.eq("_id", actualizarHotel.getId());
-        
-        try{ 
+
+        try {
             Document hotelDocument = new Document()
-                .append("nombre", actualizarHotel.getNombre())
-                .append("direccion", actualizarHotel.getDireccion())
-                .append("telefono", actualizarHotel.getTelefono())
-                .append("añoConstruccion", actualizarHotel.getAñoConstruccion())
-                .append("_idCategoria", actualizarHotel.getCategoria().getId());
+                    .append("nombre", actualizarHotel.getNombre())
+                    .append("direccion", actualizarHotel.getDireccion())
+                    .append("telefono", actualizarHotel.getTelefono())
+                    .append("añoConstruccion", actualizarHotel.getAñoConstruccion())
+                    .append("_idCategoria", actualizarHotel.getCategoria().getId());
 
             Document actualizacion = new Document("$set", hotelDocument);
             UpdateResult updateResult = coleccion.updateOne(filtro, actualizacion);
-            
-        }catch (Exception e){
+
+        } catch (Exception e) {
             throw new PersistenciaException("Error al actualizar hotel:" + e.getMessage());
         }
-        
+
         return actualizarHotel;
     }
 
     /**
-     * 
+     *
      * @param eliminarHotel
-     * @return 
+     * @return
      * @throws Excepciones.PersistenciaException
      */
     @Override
-    public Hotel eliminar(Hotel eliminarHotel) throws PersistenciaException{
+    public Hotel eliminar(Hotel eliminarHotel) throws PersistenciaException {
         Document filtro = new Document("_id", eliminarHotel.getId());
-        
-        try{
+
+        try {
             coleccion.deleteOne(filtro);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new PersistenciaException("Error al eliminar hotel:" + e.getMessage());
         }
-        
+
         return eliminarHotel;
     }
 
     /**
-     * 
+     *
      * @param id
      * @return
-     * @throws PersistenciaException 
+     * @throws PersistenciaException
      */
     @Override
     public Hotel buscar(ObjectId id) throws PersistenciaException {
         Document filtro = new Document("_id", id);
-        
-        try{
+
+        try {
             Document hotel = coleccion.find(filtro).first();
-            
+
             ObjectId categoriaId = hotel.getObjectId("_idCategoria");
 
             // Buscamos la categoría correspondiente en su respectiva colección
             CategoriaDAO cDAO = new CategoriaDAO();
             Categoria categoria = cDAO.buscar(categoriaId);
-            
+
             return new Hotel(
                     hotel.getObjectId("_id"),
                     hotel.getString("nombre"),
@@ -129,10 +132,47 @@ public class HotelDAO implements IHotelDAO{
                     hotel.getString("añoConstruccion"),
                     categoria
             );
-        }catch (PersistenciaException e){
-            System.out.println("ocurrio un error en:"  + e.getMessage());
+        } catch (PersistenciaException e) {
+            System.out.println("ocurrio un error en:" + e.getMessage());
         }
-        
+
         return null;
     }
+
+   public List<Hotel> obtenerTodosLosHoteles() throws PersistenciaException {
+    List<Hotel> hoteles = new ArrayList<>();
+
+    try {
+        FindIterable<Document> iterable = coleccion.find();
+        for (Document document : iterable) {
+            CategoriaDAO cDAO = new CategoriaDAO();
+
+            ObjectId categoriaId = null;
+            Categoria categoria = null;
+
+            // Verificar si "_idCategoria" está presente y no es nulo
+            if (document.containsKey("_idCategoria") && document.get("_idCategoria") != null) {
+                categoriaId = document.getObjectId("_idCategoria");
+                // Verificar si la categoría es nula después de obtener el ID
+                categoria = cDAO.buscar(categoriaId);
+            }
+
+            Hotel hotel = new Hotel(
+                    document.getObjectId("_id"),
+                    document.getString("nombre"),
+                    document.getString("direccion"),
+                    document.getString("telefono"),
+                    document.getString("añoConstruccion"),
+                    categoria
+            );
+
+            hoteles.add(hotel);
+        }
+    } catch (PersistenciaException e) {
+        throw new PersistenciaException("Error al obtener todos los hoteles:" + e.getMessage());
+    }
+
+    return hoteles;
+}
+
 }

@@ -26,13 +26,18 @@ public class frmTipoDeReservación extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        btnEleccionPersonal = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Personal");
+        btnEleccionPersonal.setText("Personal");
+        btnEleccionPersonal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEleccionPersonalActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Agencia de viajes");
 
@@ -46,7 +51,7 @@ public class frmTipoDeReservación extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(101, 101, 101)
-                        .addComponent(jButton1)
+                        .addComponent(btnEleccionPersonal)
                         .addGap(60, 60, 60)
                         .addComponent(jButton2))
                     .addGroup(layout.createSequentialGroup()
@@ -61,7 +66,7 @@ public class frmTipoDeReservación extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 164, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(btnEleccionPersonal)
                     .addComponent(jButton2))
                 .addGap(77, 77, 77))
         );
@@ -69,6 +74,17 @@ public class frmTipoDeReservación extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnEleccionPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEleccionPersonalActionPerformed
+        // Create an instance of frmHotel
+        frmHotel hotelFrame = new frmHotel();
+
+        // Make the frmHotel frame visible
+        hotelFrame.setVisible(true);
+
+        // Close the current frame if needed
+        this.dispose(); // Add this line if you want to close the current frame
+    }//GEN-LAST:event_btnEleccionPersonalActionPerformed
 
     /**
      * @param args the command line arguments
@@ -106,7 +122,7 @@ public class frmTipoDeReservación extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnEleccionPersonal;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
