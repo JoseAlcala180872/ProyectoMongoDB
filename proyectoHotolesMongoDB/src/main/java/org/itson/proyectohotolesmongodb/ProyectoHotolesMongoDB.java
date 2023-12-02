@@ -43,15 +43,15 @@ public class ProyectoHotolesMongoDB {
 //        hotelDAO.insertar(hotel1);
 //        hotelDAO.insertar(hotel2);
 //        hotelDAO.insertar(hotel3);
-        
-        
-        Hotel hotel4 = hotelDAO.buscar("Posada Deluexe");
+//        
+//        
+//        Hotel hotel4 = hotelDAO.buscar("Posada Deluexe");
 //        Hotel hotel5 = hotelDAO.buscar("La nana");
 //        Hotel hotel6 = hotelDAO.buscar("El viejo Jimmy");
 //
-////        Habitacion habitacion1 = new Habitacion("inidividual", 12, 1500, hotel4, false);
-////        Habitacion habitacion2 = new Habitacion("individual", 13, 2500, hotel5, false);
-////        Habitacion habitacion3 = new Habitacion("doble", 15, 4500, hotel6, false);
+//        Habitacion habitacion1 = new Habitacion("inidividual", 12, 1500, hotel4, false);
+//        Habitacion habitacion2 = new Habitacion("individual", 13, 2500, hotel5, false);
+//        Habitacion habitacion3 = new Habitacion("doble", 15, 4500, hotel6, false);
 //        
 //        Habitacion habitacionO1 = new Habitacion("doble", 16, 500, hotel4, true);
 //        Habitacion habitacionO2 = new Habitacion("individual", 17, 250, hotel5, true);
@@ -61,19 +61,19 @@ public class ProyectoHotolesMongoDB {
 //        habitacionDAO.insertar(habitacionO2);
 //        habitacionDAO.insertar(habitacionO3);
 
-        ArrayList<Habitacion> listaHabitaciones = (ArrayList<Habitacion>) habitacionDAO.obtenerTodasLasHabitacionesPorHotel(hotel4);
-        ArrayList<Habitacion> listaHabitacionesSinAsignar = new ArrayList<>();
-        for (int i = 0; i < listaHabitaciones.size(); i++) {
-            if(!listaHabitaciones.get(i).isIsAsignado()){
-                
-                listaHabitacionesSinAsignar.add(listaHabitaciones.get(i));
-            }
-        }
-        
-        
-        for (Habitacion habitacion : listaHabitacionesSinAsignar) {
-            System.out.println(habitacion.toString());
-        }
+//        ArrayList<Habitacion> listaHabitaciones = (ArrayList<Habitacion>) habitacionDAO.obtenerTodasLasHabitacionesPorHotel(hotel4);
+//        ArrayList<Habitacion> listaHabitacionesSinAsignar = new ArrayList<>();
+//        for (int i = 0; i < listaHabitaciones.size(); i++) {
+//            if(!listaHabitaciones.get(i).isIsAsignado()){
+//                
+//                listaHabitacionesSinAsignar.add(listaHabitaciones.get(i));
+//            }
+//        }
+//        
+//        
+//        for (Habitacion habitacion : listaHabitacionesSinAsignar) {
+//            System.out.println(habitacion.toString());
+//        }
         
     }
 }

@@ -3,29 +3,31 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Dominio;
+
 import org.bson.types.ObjectId;
 import java.util.Date;
+
 /**
  *
- * @author 
+ * @author
  */
 public class Reservacion {
-    
+
     private int _id;
     private Cliente cliente;
     private String nombre;
     private String direccion;
     private String telefono;
     private Hotel categoriaHotel;
-    private  Date periodoEstancia; //Tipo de dato temporal, tiene que ser tipo Periodo. Será una clase que se creará
+    private Date periodoEstancia; //Tipo de dato temporal, tiene que ser tipo Periodo. Será una clase que se creará
     private Habitacion claseHabitacion;
 
-    public Reservacion(){
-        
+    public Reservacion() {
+
     }
-    
+
     /**
-     * 
+     *
      * @param _id
      * @param cliente
      * @param nombre
@@ -33,7 +35,7 @@ public class Reservacion {
      * @param telefono
      * @param categoriaHotel
      * @param periodoEstancia
-     * @param claseHabitacion 
+     * @param claseHabitacion
      */
     public Reservacion(int _id, Cliente cliente, String nombre, String direccion, String telefono, Hotel categoriaHotel, Date periodoEstancia, Habitacion claseHabitacion) {
         this._id = _id;
@@ -45,16 +47,16 @@ public class Reservacion {
         this.periodoEstancia = periodoEstancia;
         this.claseHabitacion = claseHabitacion;
     }
-    
+
     /**
-     * 
+     *
      * @param cliente
      * @param nombre
      * @param direccion
      * @param telefono
      * @param categoriaHotel
      * @param periodoEstancia
-     * @param claseHabitacion 
+     * @param claseHabitacion
      */
     public Reservacion(Cliente cliente, String nombre, String direccion, String telefono, Hotel categoriaHotel, Date periodoEstancia, Habitacion claseHabitacion) {
         this.cliente = cliente;
@@ -66,7 +68,4 @@ public class Reservacion {
         this.claseHabitacion = claseHabitacion;
     }
 
-    
-    
-    
 }

@@ -154,7 +154,6 @@ public class frmHotel extends javax.swing.JFrame {
         
         try{
            Hotel hotelSeleccionado =  hotelBO.buscar(nombre);
-           
            new frmHabitacion(hotelSeleccionado).setVisible(true);
            this.dispose();
         }catch (BOException e){
