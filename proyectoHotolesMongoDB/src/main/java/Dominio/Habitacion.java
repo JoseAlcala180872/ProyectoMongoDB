@@ -15,6 +15,7 @@ public class Habitacion {
     private int numeroHabitacion;
     private double tarifa;
     private Hotel hotel;
+    private boolean isAsignado;
 
     public Habitacion(){  
     }
@@ -25,13 +26,15 @@ public class Habitacion {
      * @param tipoHabitacion
      * @param numeroHabitacion
      * @param tarifa 
+     * @param hotel 
      */
-    public Habitacion(ObjectId _id, String tipoHabitacion, int numeroHabitacion, double tarifa, Hotel hotel) {
+    public Habitacion(ObjectId _id, String tipoHabitacion, int numeroHabitacion, double tarifa, Hotel hotel, boolean isAsignado) {
         this._id = _id;
         this.tipoHabitacion = tipoHabitacion;
         this.numeroHabitacion = numeroHabitacion;
         this.tarifa = tarifa;
         this.hotel = hotel;
+        this.isAsignado = isAsignado;
     }
     
     /**
@@ -40,11 +43,12 @@ public class Habitacion {
      * @param numeroHabitacion
      * @param tarifa 
      */
-    public Habitacion(String tipoHabitacion, int numeroHabitacion, double tarifa, Hotel hotel) {
+    public Habitacion(String tipoHabitacion, int numeroHabitacion, double tarifa, Hotel hotel, boolean isAsignado) {
         this.tipoHabitacion = tipoHabitacion;
         this.numeroHabitacion = numeroHabitacion;
         this.tarifa = tarifa;
         this.hotel = hotel;
+        this.isAsignado = isAsignado;
     }
 
     public ObjectId getId() {
@@ -86,6 +90,20 @@ public class Habitacion {
     public void setHotel(Hotel hotel) {
         this.hotel = hotel;
     }
+
+    public boolean isIsAsignado() {
+        return isAsignado;
+    }
+
+    public void setIsAsignado(boolean isAsignado) {
+        this.isAsignado = isAsignado;
+    }
+
+    @Override
+    public String toString() {
+        return "Habitacion{" + "_id=" + _id + ", tipoHabitacion=" + tipoHabitacion + ", numeroHabitacion=" + numeroHabitacion + ", tarifa=" + tarifa + ", hotel=" + hotel + ", isAsignado=" + isAsignado + '}';
+    }
+    
     
     
     

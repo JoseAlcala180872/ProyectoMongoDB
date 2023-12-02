@@ -8,6 +8,7 @@ import Persistencia.Interfaces.IHotelDAO;
 import Excepciones.BOException;
 import Excepciones.PersistenciaException;
 import Persistencia.DAO.HotelDAO;
+import java.util.List;
 import org.bson.types.ObjectId;
 /**
  *
@@ -78,6 +79,35 @@ public class HotelBO {
         
         try{
             return hotelDAO.buscar(idHotel);
+        }catch (PersistenciaException e){
+            throw new BOException(e.getMessage(), e);
+        }
+        
+    }
+    
+    /**
+     * 
+     * @param nombre
+     * @return
+     * @throws BOException 
+     */
+    public Hotel buscar(String nombre) throws BOException{
+        
+        try{
+            return hotelDAO.buscar(nombre);
+        }catch(PersistenciaException e){
+            throw new BOException(e.getMessage(), e);
+        }
+    }
+    /**
+     * 
+     * @return
+     * @throws BOException 
+     */
+    public List<Hotel> obtenerTodosLosHoteles() throws BOException{
+        
+        try{
+            return hotelDAO.obtenerTodosLosHoteles();
         }catch (PersistenciaException e){
             throw new BOException(e.getMessage(), e);
         }

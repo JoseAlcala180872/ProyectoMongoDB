@@ -139,6 +139,11 @@ public class HotelDAO implements IHotelDAO {
         return null;
     }
 
+    /**
+     * 
+     * @return
+     * @throws PersistenciaException 
+     */
    public List<Hotel> obtenerTodosLosHoteles() throws PersistenciaException {
     List<Hotel> hoteles = new ArrayList<>();
 
@@ -174,5 +179,39 @@ public class HotelDAO implements IHotelDAO {
 
     return hoteles;
 }
+
+   /**
+    * 
+    * @param nombre
+    * @return
+    * @throws PersistenciaException 
+    */
+    @Override
+    public Hotel buscar(String nombre) throws PersistenciaException {
+        Document filtro = new Document("nombre", nombre);
+
+        try {
+            Document hotel = coleccion.find(filtro).first();
+
+            ObjectId categoriaId = hotel.getObjectId("_idCategoria");
+
+            // Buscamos la categoría correspondiente en su respectiva colección
+            CategoriaDAO cDAO = new CategoriaDAO();
+            Categoria categoria = cDAO.buscar(categoriaId);
+
+            return new Hotel(
+                    hotel.getObjectId("_id"),
+                    hotel.getString("nombre"),
+                    hotel.getString("direccion"),
+                    hotel.getString("telefono"),
+                    hotel.getString("añoConstruccion"),
+                    categoria
+            );
+        } catch (PersistenciaException e) {
+            System.out.println("ocurrio un error en:" + e.getMessage());
+        }
+
+        return null;
+    }
 
 }

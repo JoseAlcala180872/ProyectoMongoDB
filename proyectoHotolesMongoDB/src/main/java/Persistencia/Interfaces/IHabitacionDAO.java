@@ -4,7 +4,9 @@
  */
 package Persistencia.Interfaces;
 import Dominio.Habitacion;
+import Dominio.Hotel;
 import Excepciones.PersistenciaException;
+import java.util.List;
 import org.bson.types.ObjectId;
 /**
  *
@@ -17,4 +19,5 @@ public interface IHabitacionDAO {
     public Habitacion eliminar(Habitacion eliminarhabitacion) throws PersistenciaException;
     public Habitacion buscar(ObjectId idCategoria) throws PersistenciaException;
     public Habitacion buscar(int numeroHabitacion) throws PersistenciaException;
+    public List<Habitacion> obtenerTodasLasHabitacionesPorHotel(Hotel hotelSeleccionado) throws PersistenciaException;
 }

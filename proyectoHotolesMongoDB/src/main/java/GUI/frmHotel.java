@@ -5,9 +5,11 @@
 package GUI;
 
 import Dominio.Hotel;
-import Excepciones.PersistenciaException;
-import Persistencia.DAO.HotelDAO;
+import Excepciones.BOException;
+import Negocio.HotelBO;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -16,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class frmHotel extends javax.swing.JFrame {
 
-    private final HotelDAO hotelDAO;
+    private final HotelBO hotelBO;
 
     /**
      * Creates new form frmHotel
@@ -24,14 +26,17 @@ public class frmHotel extends javax.swing.JFrame {
     public frmHotel() {
 
         initComponents();
-        hotelDAO = new HotelDAO(); // Initialize HotelDAO
+        hotelBO = new HotelBO(); // Initialize HotelBO
         cargarDatosEnTabla();
     }
 
+    /**
+     * 
+     */
     private void cargarDatosEnTabla() {
         try {
             // Llamar al método para obtener todos los hoteles
-            List<Hotel> hoteles = hotelDAO.obtenerTodosLosHoteles();
+            List<Hotel> hoteles = hotelBO.obtenerTodosLosHoteles();
 
             // Crear un DefaultTableModel con nombres de columnas
             DefaultTableModel model = new DefaultTableModel();
@@ -55,10 +60,10 @@ public class frmHotel extends javax.swing.JFrame {
             }
 
             // Establecer el modelo de tabla a la jTableHoteles
-            jTableHoteles.setModel(model);
-        } catch (PersistenciaException e) {
-            // Handle exception (display an error message, log, etc.)
-            e.printStackTrace();
+            tablaHoteles.setModel(model);
+            
+        } catch (BOException ex) {
+            Logger.getLogger(frmHotel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -73,14 +78,15 @@ public class frmHotel extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTableHoteles = new javax.swing.JTable();
+        tablaHoteles = new javax.swing.JTable();
+        btnSeleccionarHotel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Hoteles");
 
-        jTableHoteles.setModel(new javax.swing.table.DefaultTableModel(
+        tablaHoteles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -91,13 +97,20 @@ public class frmHotel extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTableHoteles);
-        if (jTableHoteles.getColumnModel().getColumnCount() > 0) {
-            jTableHoteles.getColumnModel().getColumn(0).setHeaderValue("Title 1");
-            jTableHoteles.getColumnModel().getColumn(1).setHeaderValue("Title 2");
-            jTableHoteles.getColumnModel().getColumn(2).setHeaderValue("Title 3");
-            jTableHoteles.getColumnModel().getColumn(3).setHeaderValue("Title 4");
+        jScrollPane1.setViewportView(tablaHoteles);
+        if (tablaHoteles.getColumnModel().getColumnCount() > 0) {
+            tablaHoteles.getColumnModel().getColumn(0).setHeaderValue("Title 1");
+            tablaHoteles.getColumnModel().getColumn(1).setHeaderValue("Title 2");
+            tablaHoteles.getColumnModel().getColumn(2).setHeaderValue("Title 3");
+            tablaHoteles.getColumnModel().getColumn(3).setHeaderValue("Title 4");
         }
+
+        btnSeleccionarHotel.setText("Seleccionar");
+        btnSeleccionarHotel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSeleccionarHotelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -109,8 +122,13 @@ public class frmHotel extends javax.swing.JFrame {
                 .addContainerGap(213, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnSeleccionarHotel)
+                        .addGap(187, 187, 187))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,12 +137,31 @@ public class frmHotel extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(118, Short.MAX_VALUE))
+                .addGap(48, 48, 48)
+                .addComponent(btnSeleccionarHotel)
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSeleccionarHotelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarHotelActionPerformed
+        // TODO add your handling code here:
+        int indiceHotel = tablaHoteles.getSelectedRow();
+        
+        String nombre = tablaHoteles.getValueAt(indiceHotel, 0).toString();
+        
+        try{
+           Hotel hotelSeleccionado =  hotelBO.buscar(nombre);
+           
+           new frmHabitacion(hotelSeleccionado).setVisible(true);
+           this.dispose();
+        }catch (BOException e){
+            e.getStackTrace();
+        }
+        
+    }//GEN-LAST:event_btnSeleccionarHotelActionPerformed
 
     /**
      * @param args the command line arguments
@@ -162,8 +199,9 @@ public class frmHotel extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSeleccionarHotel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableHoteles;
+    private javax.swing.JTable tablaHoteles;
     // End of variables declaration//GEN-END:variables
 }

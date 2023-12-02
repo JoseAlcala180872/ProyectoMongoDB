@@ -4,10 +4,13 @@
  */
 package Negocio;
 import Dominio.Habitacion;
+import Dominio.Hotel;
 import Persistencia.Interfaces.IHabitacionDAO;
 import Excepciones.BOException;
 import Excepciones.PersistenciaException;
 import Persistencia.DAO.HabitacionDAO;
+import java.util.ArrayList;
+import java.util.List;
 import org.bson.types.ObjectId;
 
 /**
@@ -97,5 +100,53 @@ public class HabitacionBO {
         }catch(PersistenciaException e){
             throw new BOException(e.getMessage(), e);
         }
+    }
+    
+    /**
+     * 
+     * @param hotelSeleccionado
+     * @return
+     * @throws BOException 
+     */
+    public List<Habitacion> obtenerTodasLasHabitacionesPorHotel(Hotel hotelSeleccionado) throws BOException{
+        
+        try{
+            
+            List<Habitacion> listaHabitaciones = habitacionDAO.obtenerTodasLasHabitacionesPorHotel(hotelSeleccionado);
+            
+            return listaHabitaciones;
+            
+        }catch(PersistenciaException e){
+            throw new BOException(e.getMessage(), e);
+        }
+        
+    }
+    
+    /**
+     * 
+     * @param hotelSeleccionado
+     * @return 
+     * @throws Excepciones.BOException 
+     */
+    public ArrayList<Habitacion> obtenerHabitacionsSinAsignar(Hotel hotelSeleccionado) throws BOException{
+        
+        try{
+            ArrayList<Habitacion> listaHabitaciones = (ArrayList<Habitacion>) habitacionDAO.obtenerTodasLasHabitacionesPorHotel(hotelSeleccionado);
+            ArrayList<Habitacion> listaHabitacionesSinAsignar = new ArrayList<>();
+            
+        for (int i = 0; i < listaHabitaciones.size(); i++) {
+            if(!listaHabitaciones.get(i).isIsAsignado()){
+                
+                listaHabitacionesSinAsignar.add(listaHabitaciones.get(i));
+            }
+        }
+
+            return listaHabitacionesSinAsignar;
+            
+        }catch(PersistenciaException e){
+            throw new BOException(e.getMessage(), e);
+        }
+                
+        
     }
 }

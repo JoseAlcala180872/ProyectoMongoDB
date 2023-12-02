@@ -47,7 +47,8 @@ public class HabitacionDAO implements IHabitacionDAO{
             habitacionDocument.append("tipoHabitacion", insertarHabitacion.getTipoHabitacion())
                 .append("numeroHabitacion", insertarHabitacion.getNumeroHabitacion())
                 .append("tarifa", insertarHabitacion.getTarifa())
-                .append("_idHotel", insertarHabitacion.getHotel().getId());
+                .append("_idHotel", insertarHabitacion.getHotel().getId())
+                .append("Asignado", insertarHabitacion.isIsAsignado());
 
             coleccion.insertOne(habitacionDocument);
         }catch(Exception e){
@@ -72,7 +73,8 @@ public class HabitacionDAO implements IHabitacionDAO{
                 .append("tipoHabitacion", actualizarHabitacion.getTipoHabitacion())
                 .append("numeroHabitacion", actualizarHabitacion.getNumeroHabitacion())
                 .append("tarifa", actualizarHabitacion.getTarifa())
-                .append("_idHotel", actualizarHabitacion.getHotel().getId());
+                .append("_idHotel", actualizarHabitacion.getHotel().getId())
+                .append("Asignado", actualizarHabitacion.isIsAsignado());
 
             Document actualizacion = new Document("$set", habitacionDocument);
             UpdateResult updateOne = coleccion.updateOne(filtro, actualizacion);
@@ -127,7 +129,8 @@ public class HabitacionDAO implements IHabitacionDAO{
                     habitacion.getString("tipoHabitacion"),
                     habitacion.getInteger("numeroHabitacion"),
                     habitacion.getDouble("tarifa"),
-                    hotel
+                    hotel,
+                    habitacion.getBoolean("Asignado")
             );
         }catch (PersistenciaException e){
             System.out.println("ocurrio un error en:"  + e.getMessage());
@@ -161,7 +164,8 @@ public class HabitacionDAO implements IHabitacionDAO{
                     habitacion.getString("tipoHabitacion"),
                     habitacion.getInteger("numeroHabitacion"),
                     habitacion.getDouble("tarifa"),
-                    hotel
+                    hotel,
+                    habitacion.getBoolean("Asignado")
             );
         }catch (PersistenciaException e){
             System.out.println("ocurrio un error en:"  + e.getMessage());
@@ -171,6 +175,11 @@ public class HabitacionDAO implements IHabitacionDAO{
         
     }
    
+    /**
+     * 
+     * @return
+     * @throws PersistenciaException 
+     */
     public List <Habitacion> obtenerTodasLasHabitaciones() throws PersistenciaException{
         List <Habitacion> habitaciones = new ArrayList<>();
         
@@ -191,7 +200,8 @@ public class HabitacionDAO implements IHabitacionDAO{
                         document.getString("tipoHabitacion"),
                         document.getInteger("numeroHabitacion"),
                         document.getDouble("tarifa"),
-                        hotel
+                        hotel,
+                        document.getBoolean("Asignado")
                         
                 );
                 
@@ -205,4 +215,36 @@ public class HabitacionDAO implements IHabitacionDAO{
         return habitaciones;
     }
     
+    /**
+     * 
+     * @return
+     * @throws PersistenciaException 
+     */
+    public List <Habitacion> obtenerTodasLasHabitacionesPorHotel(Hotel hotelSeleccionado) throws PersistenciaException{
+        List <Habitacion> habitaciones = new ArrayList<>();
+        
+        try{
+             Bson filtro = Filters.eq("_idHotel", hotelSeleccionado.getId());
+            FindIterable<Document> iterable = coleccion.find(filtro);
+            for(Document document : iterable){
+          
+                Habitacion habitacion = new Habitacion(
+                                    document.getObjectId(("_id")),
+                        document.getString("tipoHabitacion"),
+                        document.getInteger("numeroHabitacion"),
+                        document.getDouble("tarifa"),
+                        hotelSeleccionado,
+                        document.getBoolean("Asignado")
+                        
+                );
+                
+                habitaciones.add(habitacion);
+            }
+            
+                    }
+        catch(Exception e) {
+                    System.out.println("error desconocido");
+        }
+        return habitaciones;
+    }
 }
