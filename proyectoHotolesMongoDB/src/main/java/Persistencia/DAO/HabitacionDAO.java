@@ -11,8 +11,12 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import Persistencia.Interfaces.IHabitacionDAO;
 import Excepciones.PersistenciaException;
+import com.mongodb.MongoException;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.UpdateResult;
+import java.util.ArrayList;
+import java.util.List;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 /**
@@ -166,4 +170,39 @@ public class HabitacionDAO implements IHabitacionDAO{
         return null;
         
     }
+   
+    public List <Habitacion> obtenerTodasLasHabitaciones() throws PersistenciaException{
+        List <Habitacion> habitaciones = new ArrayList<>();
+        
+        try{
+            FindIterable<Document> iterable = coleccion.find();
+            for(Document document : iterable){
+                HotelDAO hDAO = new HotelDAO();
+                
+                ObjectId hotelId = null;
+                Hotel hotel = null;
+                
+                if(document.containsKey("_idHotel") && document.get("_idHotel") != null){
+                    hotelId = document.getObjectId("_idHotel");
+                    hotel = hDAO.buscar(hotelId);
+                }
+                
+                Habitacion habitacion = new Habitacion(
+                        document.getString("tipoHabitacion"),
+                        document.getInteger("numeroHabitacion"),
+                        document.getDouble("tarifa"),
+                        hotel
+                        
+                );
+                
+                habitaciones.add(habitacion);
+            }
+            
+                    }
+        catch(PersistenciaException e) {
+                    throw new PersistenciaException("Error al obtener todas las habitaciones: "+ e.getMessage());
+        }
+        return habitaciones;
+    }
+    
 }

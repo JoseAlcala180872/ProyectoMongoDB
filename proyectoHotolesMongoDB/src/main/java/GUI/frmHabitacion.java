@@ -5,17 +5,55 @@
 
 package GUI;
 
+import Dominio.Habitacion;
+import Excepciones.PersistenciaException;
+import Persistencia.DAO.HabitacionDAO;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author YeisiPC
  */
 public class frmHabitacion extends javax.swing.JFrame {
-
+    
+    private final HabitacionDAO habitacionDAO;
     /** Creates new form frmHabitacion */
+    
     public frmHabitacion() {
         initComponents();
+        habitacionDAO = new HabitacionDAO();
+        cargarDatosEnTabla();
     }
+    
+    public void cargarDatosEnTabla(){
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("Numero de Habitacion");
+            model.addColumn("Tipo de Habitacion");
+            model.addColumn("Tarifa");
+        try{
+            List <Habitacion> habitaciones = habitacionDAO.obtenerTodasLasHabitaciones();
+            
+            for(Habitacion habitacion : habitaciones){
+                Object[] rowData = new Object[]{
+                    habitacion.getNumeroHabitacion(),
+                    habitacion.getTipoHabitacion(),
+                    habitacion.getTarifa(),
+                    
+                    habitacion.getHotel() != null ? habitacion.getHotel() :"N/A"
+                };
+                model.addRow(rowData);
+            }
+            
+            jTable1.setModel(model);
+           
+        } catch (PersistenciaException e){
+            e.printStackTrace();
+        }
+    }
+    
+    
 
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -77,7 +115,7 @@ public class frmHabitacion extends javax.swing.JFrame {
                         .addGap(255, 255, 255)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(113, 113, 113)
+                        .addGap(116, 116, 116)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
