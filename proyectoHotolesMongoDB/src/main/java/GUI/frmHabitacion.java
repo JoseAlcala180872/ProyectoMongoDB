@@ -19,6 +19,8 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.Period;
 import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -27,6 +29,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class frmHabitacion extends javax.swing.JFrame {
 
+    private JPanel errorPanel;
     private final HabitacionBO habitacionBO;
     private Hotel hotelSeleccionado;
     private Cliente clienteRegistrado;
@@ -36,11 +39,11 @@ public class frmHabitacion extends javax.swing.JFrame {
 
     /**
      * Creates new form frmHabitacion
+     *
      * @param clienteRegistrado
      * @param hotelSeleccionado
      */
-
-    public frmHabitacion(Cliente clienteRegistrado,Hotel hotelSeleccionado) {
+    public frmHabitacion(Cliente clienteRegistrado, Hotel hotelSeleccionado) {
         initComponents();
         this.reservacionBO = new ReservacionBO();
         this.reservacionDAO = new ReservacionDAO();
@@ -220,10 +223,36 @@ public class frmHabitacion extends javax.swing.JFrame {
     private void btnReservarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReservarActionPerformed
         // TODO add your handling code here:
 
-        
-        try{
+        try {
             int indiceHabitacion = tablaHabitacion.getSelectedRow();
-        
+
+            if (indiceHabitacion == -1) {
+                mostrarError("Selecciona una habitación para reservar.");
+                return;
+            }
+
+            LocalDate fechaActual = LocalDate.now();
+            LocalDate fechaInicial = calendarioFechaInicial.getSelectedDate();
+            LocalDate fechaFinal = calendarioFechaFinal.getSelectedDate();
+
+            if (fechaInicial.isBefore(fechaActual) || fechaFinal == null || fechaFinal.isBefore(fechaInicial) || fechaFinal.isEqual(fechaInicial)) {
+                mostrarError("La fecha inicial no puede ser anterior a la fecha actual y la fecha final debe ser posterior a la fecha inicial y no puede ser igual.");
+                return;
+            }
+
+            // Nueva verificación para no permitir reservas días antes de la fecha actual
+            if (fechaInicial.isBefore(fechaActual)) {
+                mostrarError("No puedes reservar para fechas anteriores a la fecha actual.");
+                return;
+            }
+
+            // Adding a check for the year to ensure reservations are not made too far in the future
+            int maxReservationYear = 5; // You can adjust this value based on your requirements
+            if (fechaInicial.getYear() > fechaActual.getYear() + maxReservationYear || fechaFinal.getYear() > fechaActual.getYear() + maxReservationYear) {
+                mostrarError("No puedes reservar para fechas demasiado lejanas en el futuro.");
+                return;
+            }
+
             String numeroHabitacion = tablaHabitacion.getValueAt(indiceHabitacion, 0).toString();
             Habitacion habitacionSeleccionada = habitacionBO.buscar(Integer.parseInt(numeroHabitacion));
             reservacion.setTarifa(calcularTarifa());
@@ -231,22 +260,34 @@ public class frmHabitacion extends javax.swing.JFrame {
             reservacion.setClaseHabitacion(habitacionSeleccionada);
             reservacion.setPeriodoEstancia(obtenerPeriodo());
             reservacion.setCliente(this.clienteRegistrado);
-            
+
             this.reservacionBO.insertar(reservacion);
             new frmReporteDeReservación(this.reservacion).setVisible(true);
             this.dispose();
-        }catch(BOException e){
-            e.getStackTrace();
+        } catch (BOException e) {
+            e.printStackTrace();
         }
-        
-//        this.obtenerPeriodo();
-//        this.calcularTarifa();
     }//GEN-LAST:event_btnReservarActionPerformed
-
+    private void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(errorPanel, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
     private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularActionPerformed
-        System.out.println("Estoy aqui");
-        obtenerPeriodo();
-        calcularTarifa();
+        try {
+            int indiceHabitacion = tablaHabitacion.getSelectedRow();
+
+            if (indiceHabitacion == -1) {
+                mostrarError("Selecciona una habitación antes de calcular la tarifa.");
+                return;
+            }
+
+            System.out.println("Estoy aqui");
+            obtenerPeriodo();
+            calcularTarifa();
+
+            // Resto del código
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 //        txtDiasReservados.setText(dias.toString());
 //        txtPrecioFinal.setText(String.valueOf(precioFinal));
@@ -266,8 +307,8 @@ public class frmHabitacion extends javax.swing.JFrame {
 
         LocalDate diaInicial = LocalDate.of(año, mes, dia);
 
-        LocalDate diaFinal = LocalDate.of(fechaSeleccionadaFinal.getYear(), 
-                fechaSeleccionadaFinal.getMonthValue(), 
+        LocalDate diaFinal = LocalDate.of(fechaSeleccionadaFinal.getYear(),
+                fechaSeleccionadaFinal.getMonthValue(),
                 fechaSeleccionadaFinal.getDayOfMonth());
 
         Period periodo = Period.between(diaInicial, diaFinal);
@@ -277,8 +318,8 @@ public class frmHabitacion extends javax.swing.JFrame {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public double calcularTarifa() {
         Integer dias = this.obtenerPeriodo();

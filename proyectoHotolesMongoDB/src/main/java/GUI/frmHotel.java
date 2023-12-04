@@ -11,6 +11,7 @@ import Negocio.HotelBO;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -156,18 +157,26 @@ public class frmHotel extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSeleccionarHotelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarHotelActionPerformed
-        // TODO add your handling code here:
-        int indiceHotel = tablaHoteles.getSelectedRow();
-        
-        String nombre = tablaHoteles.getValueAt(indiceHotel, 0).toString();
-        
-        try{
-           Hotel hotelSeleccionado =  hotelBO.buscar(nombre);
-           new frmHabitacion(this.clienteRegistrado, hotelSeleccionado).setVisible(true);
-           this.dispose();
-        }catch (BOException e){
-            e.getStackTrace();
-        }
+         // Verificar si se ha seleccionado alguna fila
+    int indiceHotel = tablaHoteles.getSelectedRow();
+    
+    if (indiceHotel == -1) {
+        // Si no se ha seleccionado ninguna fila, mostrar un mensaje de error
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione un hotel.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    // Continuar con el resto del código
+    String nombre = tablaHoteles.getValueAt(indiceHotel, 0).toString();
+    
+    try {
+        Hotel hotelSeleccionado =  hotelBO.buscar(nombre);
+        new frmHabitacion(this.clienteRegistrado, hotelSeleccionado).setVisible(true);
+        this.dispose();
+    } catch (BOException e) {
+        e.printStackTrace(); // Puedes considerar mostrar un mensaje de error adicional aquí
+    
+}  
         
     }//GEN-LAST:event_btnSeleccionarHotelActionPerformed
 
