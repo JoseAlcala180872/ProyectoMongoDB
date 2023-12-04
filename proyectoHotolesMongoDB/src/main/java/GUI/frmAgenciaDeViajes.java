@@ -10,6 +10,10 @@ import Negocio.ClienteBO;
 import Negocio.AgenciaDeViajesBO;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 /**
  *
  * @author YeisiPC
@@ -143,17 +147,30 @@ public class frmAgenciaDeViajes extends javax.swing.JFrame {
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
         try{
+            String nombre = txtNombre.getText();
+            String direccion = txtDireccion.getText();
+            String telefono = txtTelefono.getText();
+            String personaReservacion = txtPersona.getText();
+            
+            if(validacionNombre(nombre) && validacionNombre(personaReservacion)){
+                if(validacionTelefono(telefono)){
+                    this.cliente.setNombre(nombre);
+                    this.cliente.setDireccion(direccion);
+                    this.cliente.setTelefono(telefono);
+                    this.personaReservacion = personaReservacion;
+                    this.cliente = obtenerAgencia(this.cliente, this.personaReservacion);
 
-            this.cliente.setNombre(txtNombre.getText());
-            this.cliente.setDireccion(txtDireccion.getText());
-            this.cliente.setTelefono(txtTelefono.getText());
-            this.personaReservacion = txtPersona.getText();
-            this.cliente = obtenerAgencia(this.cliente, this.personaReservacion);
+                    frmHotel hotelFrame = new frmHotel(this.cliente);
 
-            frmHotel hotelFrame = new frmHotel(this.cliente);
-
-            hotelFrame.setVisible(true);
-            this.dispose();
+                    hotelFrame.setVisible(true);
+                    this.dispose();
+                }else{
+                    mostrarError("Solo puedes poner números en el teléfono, máximo 16 digitos", "Error", "Error al registrar");
+                }
+            }else{
+                 mostrarError("Solo puedes poner letras en el nombre", "Error", "Error al registrar");
+            }
+            
         }catch (BOException e){
             Logger.getLogger(frmPersona.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -199,40 +216,59 @@ public class frmAgenciaDeViajes extends javax.swing.JFrame {
         
      
     }
+    
     /**
-     * @param args the command line arguments
+     * 
+     * @param nombre
+     * @return 
      */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(frmAgenciaDeViajes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(frmAgenciaDeViajes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(frmAgenciaDeViajes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(frmAgenciaDeViajes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new frmAgenciaDeViajes().setVisible(true);
-//            }
-//        });
-//    }
+    private boolean validacionNombre(String nombre) {
+        
+        String nombreSinEspacios = nombre.trim();
+        
+        // Reemplazar múltiples espacios en el medio por un solo espacio
+        nombreSinEspacios = nombreSinEspacios.replaceAll("\\s+", " ");
+        
+        Pattern patronSoloLetras = Pattern.compile("^[a-zA-Z]+$");
+        Matcher matcher = patronSoloLetras.matcher(nombreSinEspacios);
+        
+        return !nombreSinEspacios.isEmpty() && matcher.matches();
+        
+    }
+    
+    /**
+     * 
+     * @param telefono
+     * @return 
+     */
+    private boolean validacionTelefono(String telefono){
+        
+        Pattern patronSoloNumeros = Pattern.compile("/^[0-9]+$/");
+        Matcher matcher = patronSoloNumeros.matcher(telefono);
+        
+        return matcher.matches();
+     
+    }
+    
+    /**
+     * 
+     * @param mensaje
+     * @param tipo
+     * @param titulo 
+     */
+    public void mostrarError(String mensaje, String tipo, String titulo) {
+        JOptionPane optionPane = new JOptionPane(mensaje);
+        if (tipo.equals("Info")) {
+            optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+        } else if (tipo.equals("Error")) {
+            optionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
+        }
+        JDialog dialog = optionPane.createDialog(titulo);
+        dialog.setAlwaysOnTop(true);
+        dialog.setVisible(true);
+    }
+    
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;

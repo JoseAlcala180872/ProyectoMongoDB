@@ -10,6 +10,10 @@ import Negocio.ClienteBO;
 import Negocio.PersonaBO;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 /**
  *
  * @author YeisiPC
@@ -134,16 +138,31 @@ public class frmPersona extends javax.swing.JFrame {
     private void btnRegistarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistarActionPerformed
         // TODO add your handling code here:
         try{
-            this.cliente.setNombre(txtNombre.getText());
-            this.cliente.setDireccion(txtDireccion.getText());
-            this.cliente.setTelefono(txtTelefono.getText());
+            String nombre = txtNombre.getText();
+            String direccion = txtDireccion.getText();
+            String telefono = txtTelefono.getText();
+            
+            if(validacionNombre(nombre)){
+                if(validacionTelefono(telefono)){
+                    
+                    this.cliente.setNombre(nombre);
+                    this.cliente.setDireccion(direccion);
+                    this.cliente.setTelefono(telefono);
 
-            this.cliente = obtenerPersona(this.cliente);
+                    this.cliente = obtenerPersona(this.cliente);
 
-            frmHotel hotelFrame = new frmHotel(this.cliente);
+                    frmHotel hotelFrame = new frmHotel(this.cliente);
 
-            hotelFrame.setVisible(true);
-            this.dispose();
+                    hotelFrame.setVisible(true);
+                    this.dispose();
+                }else{
+                    mostrarError("Solo puedes poner números en el teléfono, máximo 16 digitos", "Error", "Error al registrar");
+                }
+                
+            }else{
+                mostrarError("Solo puedes poner letras en el nombre", "Error", "Error al registrar");
+            }
+            
         }catch (BOException e){
             Logger.getLogger(frmPersona.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -188,6 +207,59 @@ public class frmPersona extends javax.swing.JFrame {
         
      
     }
+    
+    /**
+     * 
+     * @param nombre
+     * @return 
+     */
+    private boolean validacionNombre(String nombre) {
+        
+        String nombreSinEspacios = nombre.trim();
+        
+        // Reemplazar múltiples espacios en el medio por un solo espacio
+        nombreSinEspacios = nombreSinEspacios.replaceAll("\\s+", " ");
+
+        
+        Pattern patronSoloLetras = Pattern.compile("^[a-zA-Z]+$");
+        Matcher matcher = patronSoloLetras.matcher(nombreSinEspacios);
+        
+        return !nombreSinEspacios.isEmpty() && matcher.matches();
+        
+    }
+    
+    /**
+     * 
+     * @param telefono
+     * @return 
+     */
+    private boolean validacionTelefono(String telefono){
+        
+        Pattern patronSoloNumeros = Pattern.compile("/^[0-9]+$/");
+        Matcher matcher = patronSoloNumeros.matcher(telefono);
+        
+        return matcher.matches();
+     
+    }
+    
+    /**
+     * 
+     * @param mensaje
+     * @param tipo
+     * @param titulo 
+     */
+    public void mostrarError(String mensaje, String tipo, String titulo) {
+        JOptionPane optionPane = new JOptionPane(mensaje);
+        if (tipo.equals("Info")) {
+            optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+        } else if (tipo.equals("Error")) {
+            optionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
+        }
+        JDialog dialog = optionPane.createDialog(titulo);
+        dialog.setAlwaysOnTop(true);
+        dialog.setVisible(true);
+    }
+
 //    /**
 //     * @param args the command line arguments
 //     */
