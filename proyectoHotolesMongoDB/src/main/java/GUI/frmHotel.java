@@ -115,6 +115,8 @@ public class frmHotel extends javax.swing.JFrame {
             tablaHoteles.getColumnModel().getColumn(3).setHeaderValue("Title 4");
         }
 
+        btnSeleccionarHotel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnSeleccionarHotel.setIcon(new javax.swing.ImageIcon("C:\\Users\\YeisiPC\\Documents\\GitHub\\ProyectoHotelesMongoDB\\toolbar\\Tips.png")); // NOI18N
         btnSeleccionarHotel.setText("Seleccionar");
         btnSeleccionarHotel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -138,7 +140,7 @@ public class frmHotel extends javax.swing.JFrame {
                         .addGap(40, 40, 40))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnSeleccionarHotel)
-                        .addGap(187, 187, 187))))
+                        .addGap(168, 168, 168))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,9 +149,9 @@ public class frmHotel extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48)
+                .addGap(28, 28, 28)
                 .addComponent(btnSeleccionarHotel)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         pack();

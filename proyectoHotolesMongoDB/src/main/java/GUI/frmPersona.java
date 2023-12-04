@@ -72,6 +72,8 @@ public class frmPersona extends javax.swing.JFrame {
 
         txtTelefono.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
+        btnRegistar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnRegistar.setIcon(new javax.swing.ImageIcon("C:\\Users\\YeisiPC\\Documents\\GitHub\\ProyectoHotelesMongoDB\\toolbar\\Disc_Drive.png")); // NOI18N
         btnRegistar.setText("Registrar");
         btnRegistar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,7 +107,7 @@ public class frmPersona extends javax.swing.JFrame {
                             .addComponent(txtTelefono))))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(130, 130, 130)
                 .addComponent(btnRegistar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -126,9 +128,9 @@ public class frmPersona extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
                 .addComponent(btnRegistar)
-                .addGap(27, 27, 27))
+                .addGap(32, 32, 32))
         );
 
         pack();
