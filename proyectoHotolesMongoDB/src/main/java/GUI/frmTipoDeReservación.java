@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package GUI;
-
+import Dominio.AgenciaDeViajes;
+import Dominio.Cliente;
+import Dominio.Persona;
 /**
  *
  * @author YeisiPC
@@ -27,7 +29,7 @@ public class frmTipoDeReservación extends javax.swing.JFrame {
     private void initComponents() {
 
         btnEleccionPersonal = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnEleccionAgencia = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -39,7 +41,12 @@ public class frmTipoDeReservación extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Agencia de viajes");
+        btnEleccionAgencia.setText("Agencia de viajes");
+        btnEleccionAgencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEleccionAgenciaActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Elegir medio de reservacion");
 
@@ -53,7 +60,7 @@ public class frmTipoDeReservación extends javax.swing.JFrame {
                         .addGap(101, 101, 101)
                         .addComponent(btnEleccionPersonal)
                         .addGap(60, 60, 60)
-                        .addComponent(jButton2))
+                        .addComponent(btnEleccionAgencia))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(125, 125, 125)
                         .addComponent(jLabel1)))
@@ -67,7 +74,7 @@ public class frmTipoDeReservación extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 164, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEleccionPersonal)
-                    .addComponent(jButton2))
+                    .addComponent(btnEleccionAgencia))
                 .addGap(77, 77, 77))
         );
 
@@ -77,14 +84,25 @@ public class frmTipoDeReservación extends javax.swing.JFrame {
 
     private void btnEleccionPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEleccionPersonalActionPerformed
         // Create an instance of frmHotel
-        frmHotel hotelFrame = new frmHotel();
+        Cliente cliente = new Persona();
+        
+        frmPersona personaFrame = new frmPersona(cliente);
 
         // Make the frmHotel frame visible
-        hotelFrame.setVisible(true);
+        personaFrame.setVisible(true);
 
         // Close the current frame if needed
         this.dispose(); // Add this line if you want to close the current frame
     }//GEN-LAST:event_btnEleccionPersonalActionPerformed
+
+    private void btnEleccionAgenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEleccionAgenciaActionPerformed
+        // TODO add your handling code here:
+        Cliente cliente = new AgenciaDeViajes();
+     
+        frmAgenciaDeViajes agenciaFrame = new frmAgenciaDeViajes(cliente);
+        agenciaFrame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnEleccionAgenciaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -122,8 +140,8 @@ public class frmTipoDeReservación extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEleccionAgencia;
     private javax.swing.JButton btnEleccionPersonal;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

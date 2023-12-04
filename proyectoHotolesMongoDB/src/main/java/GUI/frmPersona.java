@@ -3,18 +3,31 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package GUI;
-
+import Dominio.Cliente;
+import Dominio.Persona;
+import Excepciones.BOException;
+import Negocio.ClienteBO;
+import Negocio.PersonaBO;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author YeisiPC
  */
 public class frmPersona extends javax.swing.JFrame {
 
+    private Cliente cliente;
+    private Persona persona;
+    private ClienteBO clienteBO;
+    private PersonaBO personaBO;
     /**
      * Creates new form frmPersona
      */
-    public frmPersona() {
+    public frmPersona(Cliente cliente) {
         initComponents();
+        this.clienteBO = new ClienteBO();
+        this.personaBO = new PersonaBO();
+        this.cliente = cliente;
     }
 
     /**
@@ -30,10 +43,10 @@ public class frmPersona extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        txtNombre = new javax.swing.JTextField();
+        txtDireccion = new javax.swing.JTextField();
+        txtTelefono = new javax.swing.JTextField();
+        btnRegistar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -49,13 +62,18 @@ public class frmPersona extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("Teléfono:");
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtNombre.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtDireccion.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
-        jTextField3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtTelefono.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
-        jButton1.setText("Registrar");
+        btnRegistar.setText("Registrar");
+        btnRegistar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,7 +85,7 @@ public class frmPersona extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1))
+                        .addComponent(txtNombre))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(180, 180, 180)
                         .addComponent(jLabel1)
@@ -79,12 +97,12 @@ public class frmPersona extends javax.swing.JFrame {
                             .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField3))))
+                            .addComponent(txtDireccion)
+                            .addComponent(txtTelefono))))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(btnRegistar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -95,17 +113,17 @@ public class frmPersona extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(btnRegistar)
                 .addGap(27, 27, 27))
         );
 
@@ -113,49 +131,106 @@ public class frmPersona extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmPersona.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmPersona.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmPersona.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmPersona.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void btnRegistarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistarActionPerformed
+        // TODO add your handling code here:
+        try{
+            this.cliente.setNombre(txtNombre.getText());
+            this.cliente.setDireccion(txtDireccion.getText());
+            this.cliente.setTelefono(txtTelefono.getText());
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmPersona().setVisible(true);
-            }
-        });
+            this.cliente = obtenerPersona(this.cliente);
+
+            frmHotel hotelFrame = new frmHotel(this.cliente);
+
+            hotelFrame.setVisible(true);
+            this.dispose();
+        }catch (BOException e){
+            Logger.getLogger(frmPersona.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+    }//GEN-LAST:event_btnRegistarActionPerformed
+
+    /**
+     * 
+     * @param registrarCliente
+     * @throws BOException 
+     */
+    private Cliente registrarPersona(Cliente registrarCliente) throws BOException{
+        
+        try{
+            Cliente clienteRegistrado = clienteBO.insertar(registrarCliente);
+            this.persona = new Persona(clienteRegistrado.getNombre(), clienteRegistrado.getDireccion(), clienteRegistrado.getTelefono(), clienteRegistrado);
+            Persona personaRegistrado = personaBO.insertar(this.persona);
+            return clienteRegistrado;
+        }catch(BOException e){
+            throw new BOException(e.getMessage(), e);
+        }
+        
+        
     }
+    
+    /**
+     * 
+     * @param buscarCliente
+     * @return
+     * @throws BOException 
+     */
+    private Cliente obtenerPersona(Cliente buscarCliente) throws BOException{
+        Cliente clienteObtenido;
+        try{
+            clienteObtenido = registrarPersona(buscarCliente);
+            clienteObtenido = clienteBO.buscar(clienteObtenido.getId());
+            
+            return clienteObtenido;
+        }catch(BOException e){
+            throw new BOException(e.getMessage(), e);
+        }
+        
+     
+    }
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(frmPersona.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(frmPersona.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(frmPersona.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(frmPersona.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new frmPersona().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnRegistar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField txtDireccion;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

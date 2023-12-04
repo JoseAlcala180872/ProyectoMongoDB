@@ -8,7 +8,9 @@ import Persistencia.Conexion.Conexion;
 import Persistencia.DAO.*;
 import Excepciones.PersistenciaException;
 import Dominio.*;
+import Excepciones.BOException;
 import Persistencia.Interfaces.*;
+import Negocio.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.types.ObjectId;
@@ -19,12 +21,41 @@ import org.bson.types.ObjectId;
  */
 public class ProyectoHotolesMongoDB {
 
-    public static void main(String[] args) throws PersistenciaException {
-        IHotelDAO hotelDAO = new HotelDAO();
-        ICategoriaDAO categoriaDAO = new CategoriaDAO();
-        IHabitacionDAO habitacionDAO = new HabitacionDAO();
+    public static void main(String[] args) throws PersistenciaException, BOException {
+//        IHotelDAO hotelDAO = new HotelDAO();
+//        ICategoriaDAO categoriaDAO = new CategoriaDAO();
+//        IHabitacionDAO habitacionDAO = new HabitacionDAO();
+//        
+//        IClienteDAO clienteDAO = new ClienteDAO();
+//        IPersonaDAO personaDAO = new PersonaDAO();
+        ClienteBO clienteBO = new ClienteBO();
+//        PersonaBO personaBO = new PersonaBO();
+//        AgenciaDeViajesBO agenciaBO = new AgenciaDeViajesBO();
+//       
+//        
+//        try{
+//            Cliente cliente = new Persona( "marcos zazueta", "colonia nueva palmira", "6441715490");
+//            Cliente clienteObtenido = clienteBO.insertar(cliente);
+//            Cliente clienteActual = clienteBO.buscar(clienteObtenido.getIdSistema());
+//            Persona persona = new Persona(clienteActual.getNombre(), clienteActual.getDireccion(), clienteActual.getTelefono(), clienteActual);
+//            personaBO.insertar(persona);
+//            
+//            Cliente cliente2 = new Cliente("agencia trivago", "los angeles", "777");
+//            Cliente clienteInsertado = clienteBO.insertar(cliente2);
+//            Cliente clienteBuscado = clienteBO.buscar(new ObjectId("656d47532a37a72236ad60ef"));
+//            
+//            AgenciaDeViajes cliente3 = new AgenciaDeViajes( "stephen curry", clienteBuscado);
+//            agenciaBO.insertar(cliente3);
+//
+//        }catch(BOException e){
+//            throw new BOException(e.getMessage(), e);
+//        }
         
+          Cliente clienteNuevo = new Persona("mario bros", "pueblo champiñon", "6445540");
+          
+          Cliente clienteI = clienteBO.insertar(clienteNuevo);
 
+          System.out.println(clienteI.getId().toString());
 //        Categoria categoria1 = new Categoria(5, 0.16);
 //        Categoria categoria2 = new Categoria(3, 0.16);
 //        Categoria categoria3 = new Categoria(1, 0.16);

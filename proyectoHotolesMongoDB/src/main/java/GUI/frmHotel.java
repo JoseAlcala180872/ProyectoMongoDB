@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import Dominio.Cliente;
 import Dominio.Hotel;
 import Excepciones.BOException;
 import Negocio.HotelBO;
@@ -19,12 +20,20 @@ import javax.swing.table.DefaultTableModel;
 public class frmHotel extends javax.swing.JFrame {
 
     private final HotelBO hotelBO;
-
+    private Cliente clienteRegistrado;
     /**
      * Creates new form frmHotel
+     * @param cliente
      */
-    public frmHotel() {
+    public frmHotel(Cliente clienteRegistrado) {
 
+        initComponents();
+        this.clienteRegistrado = clienteRegistrado;
+        hotelBO = new HotelBO(); // Initialize HotelBO
+        cargarDatosEnTabla();
+    }
+
+    private frmHotel() {
         initComponents();
         hotelBO = new HotelBO(); // Initialize HotelBO
         cargarDatosEnTabla();
@@ -154,7 +163,7 @@ public class frmHotel extends javax.swing.JFrame {
         
         try{
            Hotel hotelSeleccionado =  hotelBO.buscar(nombre);
-           new frmHabitacion(hotelSeleccionado).setVisible(true);
+           new frmHabitacion(this.clienteRegistrado, hotelSeleccionado).setVisible(true);
            this.dispose();
         }catch (BOException e){
             e.getStackTrace();

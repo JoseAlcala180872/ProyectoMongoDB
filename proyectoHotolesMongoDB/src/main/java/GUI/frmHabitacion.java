@@ -4,10 +4,15 @@
  */
 package GUI;
 
+import Dominio.Cliente;
 import Dominio.Habitacion;
 import Dominio.Hotel;
+import Dominio.Reservacion;
+import Persistencia.Interfaces.IReservacionDAO;
+import Persistencia.DAO.ReservacionDAO;
 import Excepciones.BOException;
 import Negocio.HabitacionBO;
+import Negocio.ReservacionBO;
 import Excepciones.PersistenciaException;
 import Persistencia.DAO.HabitacionDAO;
 import java.time.LocalDate;
@@ -24,13 +29,22 @@ public class frmHabitacion extends javax.swing.JFrame {
 
     private final HabitacionBO habitacionBO;
     private Hotel hotelSeleccionado;
+    private Cliente clienteRegistrado;
+    private IReservacionDAO reservacionDAO;
+    private ReservacionBO reservacionBO;
+    private Reservacion reservacion = new Reservacion();
 
     /**
      * Creates new form frmHabitacion
+     * @param clienteRegistrado
+     * @param hotelSeleccionado
      */
 
-    public frmHabitacion(Hotel hotelSeleccionado) {
+    public frmHabitacion(Cliente clienteRegistrado,Hotel hotelSeleccionado) {
         initComponents();
+        this.reservacionBO = new ReservacionBO();
+        this.reservacionDAO = new ReservacionDAO();
+        this.clienteRegistrado = clienteRegistrado;
         this.hotelSeleccionado = hotelSeleccionado;
         habitacionBO = new HabitacionBO();
         this.cargarDatosEnTabla();
@@ -206,6 +220,25 @@ public class frmHabitacion extends javax.swing.JFrame {
     private void btnReservarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReservarActionPerformed
         // TODO add your handling code here:
 
+        
+        try{
+            int indiceHabitacion = tablaHabitacion.getSelectedRow();
+        
+            String numeroHabitacion = tablaHabitacion.getValueAt(indiceHabitacion, 0).toString();
+            Habitacion habitacionSeleccionada = habitacionBO.buscar(Integer.parseInt(numeroHabitacion));
+            reservacion.setTarifa(calcularTarifa());
+            reservacion.setCategoriaHotel(this.hotelSeleccionado);
+            reservacion.setClaseHabitacion(habitacionSeleccionada);
+            reservacion.setPeriodoEstancia(obtenerPeriodo());
+            reservacion.setCliente(this.clienteRegistrado);
+            
+            this.reservacionBO.insertar(reservacion);
+            new frmReporteDeReservación(this.reservacion).setVisible(true);
+            this.dispose();
+        }catch(BOException e){
+            e.getStackTrace();
+        }
+        
 //        this.obtenerPeriodo();
 //        this.calcularTarifa();
     }//GEN-LAST:event_btnReservarActionPerformed
@@ -243,6 +276,10 @@ public class frmHabitacion extends javax.swing.JFrame {
         return periodo.getDays();
     }
 
+    /**
+     * 
+     * @return 
+     */
     public double calcularTarifa() {
         Integer dias = this.obtenerPeriodo();
         int indiceHabitacion = tablaHabitacion.getSelectedRow();
