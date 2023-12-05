@@ -83,4 +83,14 @@ public class AgenciaDeViajesBO {
         }
         
     }
+    
+    public AgenciaDeViajes buscarPorCliente(ObjectId idCliente) throws BOException{
+        
+        try{
+            return agenciaDAO.buscar(idCliente);
+        }catch (PersistenciaException e){
+            throw new BOException(e.getMessage(), e);
+        }
+        
+    }
 }

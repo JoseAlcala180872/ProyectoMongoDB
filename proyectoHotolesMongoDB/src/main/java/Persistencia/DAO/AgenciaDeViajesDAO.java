@@ -118,5 +118,30 @@ public class AgenciaDeViajesDAO implements IAgenciaDeViajesDAO{
 
         return null;
     }
+
+    @Override
+    public AgenciaDeViajes buscarPorCliente(ObjectId idCliente) throws PersistenciaException {
+         Document filtro = new Document("_idCliente", idCliente);
+        
+        try {
+            Document agencia = coleccion.find(filtro).first();
+
+            ObjectId clienteId = agencia.getObjectId("_idCliente");
+
+            // Buscamos la categoría correspondiente en su respectiva colección
+            ClienteDAO cDAO = new ClienteDAO();
+            Cliente cliente = cDAO.buscar(clienteId);
+            
+            return new AgenciaDeViajes(
+                    agencia.getObjectId("_id"),
+                    agencia.getString("personaReservacion"),
+                    cliente
+            );
+        } catch (PersistenciaException e) {
+            System.out.println("ocurrio un error en:" + e.getMessage());
+        }
+
+        return null;
+    }
     
 }

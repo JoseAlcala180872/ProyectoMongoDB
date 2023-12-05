@@ -15,4 +15,5 @@ public interface IAgenciaDeViajesDAO {
     public AgenciaDeViajes actualizar(AgenciaDeViajes actualizarAgenciaDeViajes) throws PersistenciaException;
     public AgenciaDeViajes eliminar(AgenciaDeViajes eliminarAgenciaDeViajes) throws PersistenciaException;
     public AgenciaDeViajes buscar(ObjectId id) throws PersistenciaException;
+    public AgenciaDeViajes buscarPorCliente(ObjectId idCliente) throws PersistenciaException;
 }

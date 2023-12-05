@@ -134,6 +134,8 @@ public class frmAgenciaDeViajes1 extends javax.swing.JFrame {
                     }else{
                         JOptionPane.showMessageDialog(null, "La agencia ya existe");
                         this.cliente = validacionCliente(nombre);
+                        this.personaReservacion = validacionNombre(personaReservacion);
+                        this.cliente = obtenerAgencia(this.cliente, this.personaReservacion);
                         new frmHotel1(this.cliente).setVisible(true);
                         this.dispose();
                     }
@@ -152,6 +154,20 @@ public class frmAgenciaDeViajes1 extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
+    /**
+     * 
+     * @param cliente 
+     */
+    public void actualizarAgencia(Cliente cliente, String personaReservacion){
+        try{
+            AgenciaDeViajes agencia =  agenciaBO.buscarPorCliente(cliente.getId());
+            agencia.setPersonaReservacion(personaReservacion);
+            agenciaBO.actualizar(agencia);
+        }catch(BOException e){
+            Logger.getLogger(frmPersona.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+    }
     /**
      * 
      * @param registrarAgencia
