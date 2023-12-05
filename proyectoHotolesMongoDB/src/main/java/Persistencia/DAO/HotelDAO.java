@@ -21,24 +21,30 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 /**
- *
- * @author TADEO
+ * Implementación de la interfaz IHotelDAO que proporciona métodos para realizar
+ * operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre entidades de tipo
+ * Hotel en la base de datos.
  */
 public class HotelDAO implements IHotelDAO {
 
     MongoDatabase baseDatos;
     MongoCollection<Document> coleccion;
 
+    /**
+     * Constructor de la clase que inicializa la conexión a la base de datos y
+     * obtiene la colección "hotel".
+     */
     public HotelDAO() {
         this.baseDatos = Conexion.getConexion();
         this.coleccion = baseDatos.getCollection("hotel");
     }
 
     /**
+     * {@inheritDoc} Inserta un nuevo hotel en la base de datos.
      *
-     * @param insertarHotel
-     * @return
-     * @throws Excepciones.PersistenciaException
+     * @param insertarHotel El hotel a insertar.
+     * @return El hotel insertado.
+     * @throws PersistenciaException Si ocurre un error durante la inserción.
      */
     @Override
     public Hotel insertar(Hotel insertarHotel) throws PersistenciaException {
@@ -60,9 +66,12 @@ public class HotelDAO implements IHotelDAO {
     }
 
     /**
+     * {@inheritDoc} Actualiza un hotel existente en la base de datos.
      *
-     * @param actualizarHotel
-     * @return
+     * @param actualizarHotel El hotel con los datos actualizados.
+     * @return El hotel actualizado.
+     * @throws PersistenciaException Si ocurre un error durante la
+     * actualización.
      */
     @Override
     public Hotel actualizar(Hotel actualizarHotel) throws PersistenciaException {
@@ -87,10 +96,11 @@ public class HotelDAO implements IHotelDAO {
     }
 
     /**
+     * {@inheritDoc} Elimina un hotel de la base de datos.
      *
-     * @param eliminarHotel
-     * @return
-     * @throws Excepciones.PersistenciaException
+     * @param eliminarHotel El hotel a eliminar.
+     * @return El hotel eliminado.
+     * @throws PersistenciaException Si ocurre un error durante la eliminación.
      */
     @Override
     public Hotel eliminar(Hotel eliminarHotel) throws PersistenciaException {
@@ -106,10 +116,12 @@ public class HotelDAO implements IHotelDAO {
     }
 
     /**
+     * {@inheritDoc} Busca un hotel por su identificador único (ID) en la base
+     * de datos.
      *
-     * @param id
-     * @return
-     * @throws PersistenciaException
+     * @param id El ID del hotel a buscar.
+     * @return El hotel encontrado o null si no se encuentra.
+     * @throws PersistenciaException Si ocurre un error durante la búsqueda.
      */
     @Override
     public Hotel buscar(ObjectId id) throws PersistenciaException {
@@ -140,52 +152,54 @@ public class HotelDAO implements IHotelDAO {
     }
 
     /**
-     * 
-     * @return
-     * @throws PersistenciaException 
+     * {@inheritDoc} Busca un hotel por su nombre en la base de datos.
+     *
+     * @param nombre El nombre del hotel a buscar.
+     * @return El hotel encontrado o null si no se encuentra.
+     * @throws PersistenciaException Si ocurre un error durante la búsqueda.
      */
-   public List<Hotel> obtenerTodosLosHoteles() throws PersistenciaException {
-    List<Hotel> hoteles = new ArrayList<>();
+    public List<Hotel> obtenerTodosLosHoteles() throws PersistenciaException {
+        List<Hotel> hoteles = new ArrayList<>();
 
-    try {
-        FindIterable<Document> iterable = coleccion.find();
-        for (Document document : iterable) {
-            CategoriaDAO cDAO = new CategoriaDAO();
+        try {
+            FindIterable<Document> iterable = coleccion.find();
+            for (Document document : iterable) {
+                CategoriaDAO cDAO = new CategoriaDAO();
 
-            ObjectId categoriaId = null;
-            Categoria categoria = null;
+                ObjectId categoriaId = null;
+                Categoria categoria = null;
 
-            // Verificar si "_idCategoria" está presente y no es nulo
-            if (document.containsKey("_idCategoria") && document.get("_idCategoria") != null) {
-                categoriaId = document.getObjectId("_idCategoria");
-                // Verificar si la categoría es nula después de obtener el ID
-                categoria = cDAO.buscar(categoriaId);
+                // Verificar si "_idCategoria" está presente y no es nulo
+                if (document.containsKey("_idCategoria") && document.get("_idCategoria") != null) {
+                    categoriaId = document.getObjectId("_idCategoria");
+                    // Verificar si la categoría es nula después de obtener el ID
+                    categoria = cDAO.buscar(categoriaId);
+                }
+
+                Hotel hotel = new Hotel(
+                        document.getObjectId("_id"),
+                        document.getString("nombre"),
+                        document.getString("direccion"),
+                        document.getString("telefono"),
+                        document.getString("añoConstruccion"),
+                        categoria
+                );
+
+                hoteles.add(hotel);
             }
-
-            Hotel hotel = new Hotel(
-                    document.getObjectId("_id"),
-                    document.getString("nombre"),
-                    document.getString("direccion"),
-                    document.getString("telefono"),
-                    document.getString("añoConstruccion"),
-                    categoria
-            );
-
-            hoteles.add(hotel);
+        } catch (PersistenciaException e) {
+            throw new PersistenciaException("Error al obtener todos los hoteles:" + e.getMessage());
         }
-    } catch (PersistenciaException e) {
-        throw new PersistenciaException("Error al obtener todos los hoteles:" + e.getMessage());
+
+        return hoteles;
     }
 
-    return hoteles;
-}
-
-   /**
-    * 
-    * @param nombre
-    * @return
-    * @throws PersistenciaException 
-    */
+    /**
+     * Obtiene todos los hoteles almacenados en la base de datos.
+     *
+     * @return Lista de todos los hoteles.
+     * @throws PersistenciaException Si ocurre un error al obtener los hoteles.
+     */
     @Override
     public Hotel buscar(String nombre) throws PersistenciaException {
         Document filtro = new Document("nombre", nombre);

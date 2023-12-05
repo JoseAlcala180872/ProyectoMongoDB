@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Persistencia.DAO;
+
 import Dominio.Cliente;
 import Dominio.AgenciaDeViajes;
 import Excepciones.PersistenciaException;
@@ -16,46 +17,52 @@ import java.util.List;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+
 /**
- *
- * @author 
+ * Implementación de la interfaz IAgenciaDeViajesDAO que proporciona
+ * métodos para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar)
+ * sobre entidades de tipo AgenciaDeViajes en la base de datos.
  */
-public class AgenciaDeViajesDAO implements IAgenciaDeViajesDAO{
+public class AgenciaDeViajesDAO implements IAgenciaDeViajesDAO {
 
     MongoDatabase baseDatos;
     MongoCollection<Document> coleccion;
-    
-    public AgenciaDeViajesDAO(){
+
+    public AgenciaDeViajesDAO() {
         this.baseDatos = Conexion.getConexion();
         this.coleccion = baseDatos.getCollection("agenciaDeViajes");
     }
+
     /**
-     * 
-     * @param insertarAgenciaDeViajes
-     * @return
-     * @throws PersistenciaException 
+     * Inserta una nueva Agencia de Viajes en la base de datos.
+     *
+     * @param insertarAgenciaDeViajes La Agencia de Viajes a insertar.
+     * @return La Agencia de Viajes insertada.
+     * @throws PersistenciaException Si ocurre un error durante la operación.
      */
     @Override
     public AgenciaDeViajes insertar(AgenciaDeViajes insertarAgenciaDeViajes) throws PersistenciaException {
-        
-       Document agenciaDocument = new Document();
+
+        Document agenciaDocument = new Document();
         try {
             agenciaDocument.append("personaReservacion", insertarAgenciaDeViajes.getPersonaReservacion())
-            .append("_idCliente", insertarAgenciaDeViajes.getCliente().getId());
+                    .append("_idCliente", insertarAgenciaDeViajes.getCliente().getId());
 
             coleccion.insertOne(agenciaDocument);
         } catch (Exception e) {
             throw new PersistenciaException("Error al insertar Agencia:" + e.getMessage());
         }
-        
+
         return insertarAgenciaDeViajes;
     }
 
     /**
-     * 
-     * @param actualizarAgenciaDeViajes
-     * @return
-     * @throws PersistenciaException 
+     * Actualiza una Agencia de Viajes existente en la base de datos.
+     *
+     * @param actualizarAgenciaDeViajes La Agencia de Viajes con los datos
+     * actualizados.
+     * @return La Agencia de Viajes actualizada.
+     * @throws PersistenciaException Si ocurre un error durante la operación.
      */
     @Override
     public AgenciaDeViajes actualizar(AgenciaDeViajes actualizarAgenciaDeViajes) throws PersistenciaException {
@@ -75,6 +82,13 @@ public class AgenciaDeViajesDAO implements IAgenciaDeViajesDAO{
         return actualizarAgenciaDeViajes;
     }
 
+    /**
+     * Elimina una Agencia de Viajes de la base de datos.
+     *
+     * @param eliminarAgenciaDeViajes La Agencia de Viajes a eliminar.
+     * @return La Agencia de Viajes eliminada.
+     * @throws PersistenciaException Si ocurre un error durante la operación.
+     */
     @Override
     public AgenciaDeViajes eliminar(AgenciaDeViajes eliminarAgenciaDeViajes) throws PersistenciaException {
         Document filtro = new Document("_id", eliminarAgenciaDeViajes.getId());
@@ -89,15 +103,16 @@ public class AgenciaDeViajesDAO implements IAgenciaDeViajesDAO{
     }
 
     /**
-     * 
-     * @param id
-     * @return
-     * @throws PersistenciaException 
+     * Busca una Agencia de Viajes por su identificador único.
+     *
+     * @param id El identificador único de la Agencia de Viajes.
+     * @return La Agencia de Viajes encontrada, o null si no se encuentra.
+     * @throws PersistenciaException Si ocurre un error durante la operación.
      */
     @Override
     public AgenciaDeViajes buscar(ObjectId id) throws PersistenciaException {
         Document filtro = new Document("_id", id);
-        
+
         try {
             Document agencia = coleccion.find(filtro).first();
 
@@ -106,7 +121,7 @@ public class AgenciaDeViajesDAO implements IAgenciaDeViajesDAO{
             // Buscamos la categoría correspondiente en su respectiva colección
             ClienteDAO cDAO = new ClienteDAO();
             Cliente cliente = cDAO.buscar(clienteId);
-            
+
             return new AgenciaDeViajes(
                     agencia.getObjectId("_id"),
                     agencia.getString("personaReservacion"),
@@ -119,10 +134,18 @@ public class AgenciaDeViajesDAO implements IAgenciaDeViajesDAO{
         return null;
     }
 
+    /**
+     * Busca una Agencia de Viajes por el identificador de su cliente asociado.
+     *
+     * @param idCliente El identificador del cliente asociado a la Agencia de
+     * Viajes.
+     * @return La Agencia de Viajes encontrada, o null si no se encuentra.
+     * @throws PersistenciaException Si ocurre un error durante la operación.
+     */
     @Override
     public AgenciaDeViajes buscarPorCliente(ObjectId idCliente) throws PersistenciaException {
-         Document filtro = new Document("_idCliente", idCliente);
-        
+        Document filtro = new Document("_idCliente", idCliente);
+
         try {
             Document agencia = coleccion.find(filtro).first();
 
@@ -131,7 +154,7 @@ public class AgenciaDeViajesDAO implements IAgenciaDeViajesDAO{
             // Buscamos la categoría correspondiente en su respectiva colección
             ClienteDAO cDAO = new ClienteDAO();
             Cliente cliente = cDAO.buscar(clienteId);
-            
+
             return new AgenciaDeViajes(
                     agencia.getObjectId("_id"),
                     agencia.getString("personaReservacion"),
@@ -143,5 +166,5 @@ public class AgenciaDeViajesDAO implements IAgenciaDeViajesDAO{
 
         return null;
     }
-    
+
 }

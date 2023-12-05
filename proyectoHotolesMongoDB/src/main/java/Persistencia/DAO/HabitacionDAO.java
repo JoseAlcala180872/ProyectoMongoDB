@@ -22,24 +22,30 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 /**
- *
- * @author
+ * Implementación de la interfaz IHabitacionDAO que proporciona métodos para
+ * realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre entidades
+ * de tipo Habitacion en la base de datos.
  */
 public class HabitacionDAO implements IHabitacionDAO {
 
     MongoDatabase baseDatos;
     MongoCollection<Document> coleccion;
 
+    /**
+     * Constructor de la clase que inicializa la conexión a la base de datos y
+     * obtiene la colección "habitacion".
+     */
     public HabitacionDAO() {
         this.baseDatos = Conexion.getConexion();
         this.coleccion = baseDatos.getCollection("habitacion");
     }
 
     /**
+     * {@inheritDoc} Inserta una nueva habitación en la base de datos.
      *
-     * @param insertarHabitacion
-     * @return
-     * @throws Excepciones.PersistenciaException
+     * @param insertarHabitacion La habitación a insertar.
+     * @return La habitación insertada.
+     * @throws PersistenciaException Si ocurre un error durante la inserción.
      */
     @Override
     public Habitacion insertar(Habitacion insertarHabitacion) throws PersistenciaException {
@@ -61,10 +67,12 @@ public class HabitacionDAO implements IHabitacionDAO {
     }
 
     /**
+     * {@inheritDoc} Actualiza una habitación existente en la base de datos.
      *
-     * @param actualizarHabitacion
-     * @return
-     * @throws Excepciones.PersistenciaException
+     * @param actualizarHabitacion La habitación con los datos actualizados.
+     * @return La habitación actualizada.
+     * @throws PersistenciaException Si ocurre un error durante la
+     * actualización.
      */
     @Override
     public Habitacion actualizar(Habitacion actualizarHabitacion) throws PersistenciaException {
@@ -89,10 +97,11 @@ public class HabitacionDAO implements IHabitacionDAO {
     }
 
     /**
+     * {@inheritDoc} Elimina una habitación de la base de datos.
      *
-     * @param eliminarHabitacion
-     * @return
-     * @throws Excepciones.PersistenciaException
+     * @param eliminarHabitacion La habitación a eliminar.
+     * @return La habitación eliminada.
+     * @throws PersistenciaException Si ocurre un error durante la eliminación.
      */
     @Override
     public Habitacion eliminar(Habitacion eliminarHabitacion) throws PersistenciaException {
@@ -108,10 +117,12 @@ public class HabitacionDAO implements IHabitacionDAO {
     }
 
     /**
+     * {@inheritDoc} Busca una habitación por su identificador único (ID) en la
+     * base de datos.
      *
-     * @param id
-     * @return
-     * @throws PersistenciaException
+     * @param id El ID de la habitación a buscar.
+     * @return La habitación encontrada o null si no se encuentra.
+     * @throws PersistenciaException Si ocurre un error durante la búsqueda.
      */
     @Override
     public Habitacion buscar(ObjectId id) throws PersistenciaException {
@@ -142,10 +153,11 @@ public class HabitacionDAO implements IHabitacionDAO {
     }
 
     /**
+     * {@inheritDoc} Busca una habitación por su número en la base de datos.
      *
-     * @param numeroHabitacion
-     * @return
-     * @throws PersistenciaException
+     * @param numeroHabitacion El número de la habitación a buscar.
+     * @return La habitación encontrada o null si no se encuentra.
+     * @throws PersistenciaException Si ocurre un error durante la búsqueda.
      */
     @Override
     public Habitacion buscar(int numeroHabitacion) throws PersistenciaException {
@@ -178,8 +190,12 @@ public class HabitacionDAO implements IHabitacionDAO {
     }
 
     /**
+     * {@inheritDoc} Obtiene todas las habitaciones almacenadas en la base de
+     * datos.
      *
-     * @return @throws PersistenciaException
+     * @return Lista de todas las habitaciones.
+     * @throws PersistenciaException Si ocurre un error al obtener las
+     * habitaciones.
      */
     public List<Habitacion> obtenerTodasLasHabitaciones() throws PersistenciaException {
         List<Habitacion> habitaciones = new ArrayList<>();
@@ -215,10 +231,14 @@ public class HabitacionDAO implements IHabitacionDAO {
     }
 
     /**
+     * {@inheritDoc} Obtiene todas las habitaciones de un hotel específico
+     * almacenadas en la base de datos.
      *
-     * @param hotelSeleccionado
-     * @return
-     * @throws PersistenciaException
+     * @param hotelSeleccionado El hotel para el cual se obtienen las
+     * habitaciones.
+     * @return Lista de habitaciones del hotel seleccionado.
+     * @throws PersistenciaException Si ocurre un error al obtener las
+     * habitaciones del hotel.
      */
     @Override
     public List<Habitacion> obtenerTodasLasHabitacionesPorHotel(Hotel hotelSeleccionado) throws PersistenciaException {

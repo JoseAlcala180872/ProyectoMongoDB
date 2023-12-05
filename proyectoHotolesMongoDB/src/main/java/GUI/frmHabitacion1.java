@@ -44,7 +44,8 @@ public class frmHabitacion1 extends javax.swing.JFrame {
     }
 
     /**
-     *
+     * Carga los datos de las habitaciones sin asignar en la tabla al iniciar el
+     * formulario.
      */
     public void cargarDatosEnTabla() {
         DefaultTableModel model = new DefaultTableModel();
@@ -166,7 +167,12 @@ public class frmHabitacion1 extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+/**
+     * Acción realizada al hacer clic en el botón "Reservar". Realiza la reserva
+     * de la habitación seleccionada.
+     *
+     * @param evt Evento de acción al hacer clic en el botón "Reservar".
+     */
     private void btnReservarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReservarActionPerformed
         // TODO add your handling code here:
         try {
@@ -214,7 +220,12 @@ public class frmHabitacion1 extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_btnReservarActionPerformed
-
+    /**
+     * Acción realizada al hacer clic en el botón "Calcular". Calcula la tarifa
+     * de la habitación seleccionada.
+     *
+     * @param evt Evento de acción al hacer clic en el botón "Calcular".
+     */
     private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularActionPerformed
         // TODO add your handling code here:
         try {
@@ -234,9 +245,11 @@ public class frmHabitacion1 extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_btnCalcularActionPerformed
-
     /**
-     * @return
+     * Obtiene el período de estancia seleccionado en días y actualiza el label
+     * correspondiente.
+     *
+     * @return Número de días de estancia.
      */
     public Integer obtenerPeriodo() {
         LocalDate fechaSeleccionadaInicial = calendarioFechaInicial.getSelectedDate();
@@ -260,8 +273,10 @@ public class frmHabitacion1 extends javax.swing.JFrame {
     }
 
     /**
+     * Calcula la tarifa total de la estancia y actualiza el label
+     * correspondiente.
      *
-     * @return
+     * @return Tarifa total de la estancia.
      */
     public double calcularTarifa() {
         // Verificar si el hotel está seleccionado

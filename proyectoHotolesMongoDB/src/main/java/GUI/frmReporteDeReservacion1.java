@@ -3,10 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package GUI;
+
 import Dominio.Reservacion;
 import Excepciones.BOException;
 import Negocio.ReservacionBO;
 import javax.swing.JOptionPane;
+
 /**
  *
  * @author YeisiPC
@@ -15,14 +17,18 @@ public class frmReporteDeReservacion1 extends javax.swing.JFrame {
 
     private ReservacionBO reservacionBO;
     private Reservacion reservacion;
+
     /**
-     * Creates new form frmReporteDeReservación
+     * Constructor de la clase 'frmReporteDeReservacion1'. Inicializa y muestra
+     * los componentes gráficos del formulario.
+     *
+     * @param reservacion Reservación para la cual se genera el reporte.
      */
     public frmReporteDeReservacion1(Reservacion reservacion) {
         initComponents();
         this.reservacionBO = new ReservacionBO();
         this.reservacion = reservacion;
-        
+
         String nombreCliente = this.reservacion.getCliente().getNombre();
         Double tarifa = this.reservacion.getTarifa();
         int periodoEstancia = this.reservacion.getPeriodoEstancia();
@@ -117,16 +123,21 @@ public class frmReporteDeReservacion1 extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+ /**
+     * Maneja el evento de clic en el botón "btnRealizarReservacion". Realiza la
+     * inserción de la reservación y muestra un mensaje de éxito.
+     *
+     * @param evt Evento de acción.
+     */
     private void btnRealizarReservacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarReservacionActionPerformed
         // TODO add your handling code here:
-        try{
+        try {
             this.reservacionBO.insertar(this.reservacion);
             JOptionPane.showMessageDialog(null, "Reservación realizada correctamente");
-            frmInicial1 ini= new frmInicial1();
+            frmInicial1 ini = new frmInicial1();
             ini.setVisible(true);
             this.dispose();
-        }catch(BOException e){
+        } catch (BOException e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_btnRealizarReservacionActionPerformed

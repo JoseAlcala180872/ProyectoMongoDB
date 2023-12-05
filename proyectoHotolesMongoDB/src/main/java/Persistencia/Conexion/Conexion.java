@@ -11,8 +11,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author TADEO
+ * Clase que proporciona la conexión a la base de datos MongoDB.
  */
 public class Conexion {
 
@@ -20,11 +19,20 @@ public class Conexion {
     private static MongoDatabase baseDatos;
     private static Conexion conexion;
 
+    /**
+     * Constructor privado de la clase 'Conexion'. Se utiliza para asegurar que
+     * solo haya una instancia de esta clase.
+     */
     public Conexion() {
         mongoClient = new MongoClient("localhost", 27017);
         baseDatos = mongoClient.getDatabase("hoteles");
     }
 
+    /**
+     * Método que crea una conexión a la base de datos MongoDB.
+     *
+     * @return Cliente de MongoDB.
+     */
     public MongoClient crearConexion() {
         MongoClient mongo = null;
         String servidor = "localhost";
@@ -40,6 +48,11 @@ public class Conexion {
         return mongo;
     }
 
+    /**
+     * Método estático que devuelve la instancia de la base de datos MongoDB.
+     *
+     * @return Instancia de la base de datos.
+     */
     public static MongoDatabase getConexion() {
         if (conexion == null) {
             conexion = new Conexion();

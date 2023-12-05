@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package GUI;
+
 import Dominio.Cliente;
 import Dominio.Persona;
 import Excepciones.BOException;
@@ -14,9 +15,10 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+
 /**
- *
- * @author YeisiPC
+ * Clase que representa el formulario 'frmPersona1'. Este formulario se utiliza
+ * para registrar información personal.
  */
 public class frmPersona1 extends javax.swing.JFrame {
 
@@ -24,8 +26,12 @@ public class frmPersona1 extends javax.swing.JFrame {
     private Persona persona;
     private ClienteBO clienteBO;
     private PersonaBO personaBO;
+
     /**
-     * Creates new form frmPersona
+     * Constructor de la clase 'frmPersona1'. Inicializa y muestra los
+     * componentes gráficos del formulario.
+     *
+     * @param cliente Cliente asociado a la persona.
      */
     public frmPersona1(Cliente cliente) {
         initComponents();
@@ -98,179 +104,193 @@ public class frmPersona1 extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+/**
+     * Maneja el evento de clic en el botón "btnRegistrar". Realiza la
+     * validación de la información ingresada (nombre, dirección, teléfono) y
+     * registra la persona asociada al cliente.
+     *
+     * @param evt Objeto que representa el evento de acción (clic en el botón).
+     */
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-        try{
+        try {
             String nombre = txtNombre.getText();
             String direccion = txtDireccion.getText();
             String telefono = txtTelefono.getText();
-            
-            if(validacionNombre(nombre) != null){
-                if(validacionTelefono(telefono) != null){
-                    if(validacionDireccion(direccion) != null){
-                    if(validacionCliente(nombre) == null){
-                    
-                        this.cliente.setNombre(validacionNombre(nombre));
-                        this.cliente.setDireccion(direccion);
-                        this.cliente.setTelefono(validacionTelefono(telefono));
 
-                        this.cliente = obtenerPersona(this.cliente);
+            if (validacionNombre(nombre) != null) {
+                if (validacionTelefono(telefono) != null) {
+                    if (validacionDireccion(direccion) != null) {
+                        if (validacionCliente(nombre) == null) {
 
-                        frmHotel1 hotelFrame = new frmHotel1(this.cliente);
+                            this.cliente.setNombre(validacionNombre(nombre));
+                            this.cliente.setDireccion(direccion);
+                            this.cliente.setTelefono(validacionTelefono(telefono));
 
-                        hotelFrame.setVisible(true);
-                        this.dispose();
-                        
-                    }else{
-                        JOptionPane.showMessageDialog(null, "La persona ya existe");
-                        this.cliente = validacionCliente(nombre);
-                        new frmHotel1(this.cliente).setVisible(true);
-                        this.dispose();
-                    }      
-                }else{
-                    mostrarError("No campos vacíos", "Error", "Error al registrar");
+                            this.cliente = obtenerPersona(this.cliente);
+
+                            frmHotel1 hotelFrame = new frmHotel1(this.cliente);
+
+                            hotelFrame.setVisible(true);
+                            this.dispose();
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "La persona ya existe");
+                            this.cliente = validacionCliente(nombre);
+                            new frmHotel1(this.cliente).setVisible(true);
+                            this.dispose();
+                        }
+                    } else {
+                        mostrarError("No campos vacíos", "Error", "Error al registrar");
+                    }
+                } else {
+                    mostrarError("Solo puedes poner números en el teléfono, máximo 16 digitos. No campos vacíos", "Error", "Error al registrar");
                 }
-                }else{
-                     mostrarError("Solo puedes poner números en el teléfono, máximo 16 digitos. No campos vacíos", "Error", "Error al registrar");   
-                } 
-            }else{
+            } else {
                 mostrarError("Solo puedes poner letras en el nombre. No campos vacíos", "Error", "Error al registrar");
             }
-            
-        }catch (BOException e){
+
+        } catch (BOException e) {
             Logger.getLogger(frmPersona1.class.getName()).log(Level.SEVERE, null, e);
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     /**
-     * 
-     * @param registrarCliente
-     * @throws BOException 
+     * Registra la persona en la base de datos.
+     *
+     * @param registrarCliente Cliente a registrar.
+     * @return Cliente registrado.
+     * @throws BOException Excepción lanzada en caso de error en la lógica de
+     * negocios.
      */
-    private Cliente registrarPersona(Cliente registrarCliente) throws BOException{
-        
-        try{
+    private Cliente registrarPersona(Cliente registrarCliente) throws BOException {
+
+        try {
             Cliente clienteRegistrado = clienteBO.insertar(registrarCliente);
             this.persona = new Persona(clienteRegistrado.getNombre(), clienteRegistrado.getDireccion(), clienteRegistrado.getTelefono(), clienteRegistrado);
             Persona personaRegistrado = personaBO.insertar(this.persona);
             return clienteRegistrado;
-        }catch(BOException e){
+        } catch (BOException e) {
             throw new BOException(e.getMessage(), e);
         }
-        
-        
+
     }
-    
+
     /**
-     * 
-     * @param buscarCliente
-     * @return
-     * @throws BOException 
+     * Obtiene la información de la persona registrada.
+     *
+     * @param buscarCliente Cliente a buscar.
+     * @return Cliente con la información completa.
+     * @throws BOException Excepción lanzada en caso de error en la lógica de
+     * negocios.
      */
-    private Cliente obtenerPersona(Cliente buscarCliente) throws BOException{
+    private Cliente obtenerPersona(Cliente buscarCliente) throws BOException {
         Cliente clienteObtenido;
-        try{
+        try {
             clienteObtenido = registrarPersona(buscarCliente);
             clienteObtenido = clienteBO.buscar(clienteObtenido.getId());
-            
+
             return clienteObtenido;
-        }catch(BOException e){
+        } catch (BOException e) {
             throw new BOException(e.getMessage(), e);
         }
-        
-     
+
     }
-    
+
     /**
-     * 
-     * @param nombre
-     * @return
-     * @throws BOException 
+     * Valida si el cliente ya existe en la base de datos.
+     *
+     * @param nombre Nombre del cliente.
+     * @return Cliente existente o null si no existe.
+     * @throws BOException Excepción lanzada en caso de error en la lógica de
+     * negocios.
      */
-    public Cliente validacionCliente(String nombre) throws BOException{
-        
-        try{
+    public Cliente validacionCliente(String nombre) throws BOException {
+
+        try {
             Cliente cliente = this.clienteBO.buscar(nombre);
-            if(cliente != null){
+            if (cliente != null) {
                 return cliente;
             }
-            
-        }catch(BOException e){
+
+        } catch (BOException e) {
             throw new BOException(e.getMessage(), e);
         }
-        
+
         return null;
     }
-    
+
     /**
-     * 
-     * @param nombre
-     * @return 
+     * Valida el nombre ingresado.
+     *
+     * @param nombre Nombre a validar.
+     * @return Nombre válido o null si es inválido.
      */
     private String validacionNombre(String nombre) {
-        
+
         String nombreSinEspacios = nombre.trim();
-        
+
         // Reemplazar múltiples espacios en el medio por un solo espacio
         nombreSinEspacios = nombreSinEspacios.replaceAll("\\s+", " ");
 
-        
         Pattern patronSoloLetras = Pattern.compile("^[a-zA-Z\\s'-]+$");
         Matcher matcher = patronSoloLetras.matcher(nombreSinEspacios);
-        
-        if(!nombreSinEspacios.isEmpty() && matcher.matches()){
+
+        if (!nombreSinEspacios.isEmpty() && matcher.matches()) {
             return nombreSinEspacios;
-        }else{
+        } else {
             return null;
-        }  
-        
+        }
+
     }
-    
+
     /**
-     * 
-     * @param direccion
-     * @return 
+     * Valida la dirección ingresada.
+     *
+     * @param direccion Dirección a validar.
+     * @return Dirección válida o null si es inválida.
      */
-    private String validacionDireccion(String direccion){
+    private String validacionDireccion(String direccion) {
         String direccionSinEspacios = direccion.trim();
-        
+
         // Reemplazar múltiples espacios en el medio por un solo espacio
         direccionSinEspacios = direccionSinEspacios.replaceAll("\\s+", " ");
-        
-        if(!direccionSinEspacios.isEmpty()){
+
+        if (!direccionSinEspacios.isEmpty()) {
             return direccionSinEspacios;
-        }else{
+        } else {
             return null;
         }
     }
-    
+
     /**
-     * 
-     * @param telefono
-     * @return 
+     * Valida el teléfono ingresado.
+     *
+     * @param telefono Teléfono a validar.
+     * @return Teléfono válido o null si es inválido.
      */
-    private String validacionTelefono(String telefono){
-        
-         String telefonoSinEspacios = telefono.replaceAll("\\s", "");
+    private String validacionTelefono(String telefono) {
+
+        String telefonoSinEspacios = telefono.replaceAll("\\s", "");
 
         // Modificar el patrón para permitir solo números
         Pattern patronSoloNumeros = Pattern.compile("^[0-9]+$");
         Matcher matcher = patronSoloNumeros.matcher(telefonoSinEspacios);
 
-        if(!telefonoSinEspacios.isEmpty() && matcher.matches()){
+        if (!telefonoSinEspacios.isEmpty() && matcher.matches()) {
             return telefonoSinEspacios;
-        }else{
+        } else {
             return null;
         }
-     
+
     }
-    
+
     /**
-     * 
-     * @param mensaje
-     * @param tipo
-     * @param titulo 
+     * Muestra un cuadro de diálogo con un mensaje de error o información.
+     *
+     * @param mensaje Mensaje a mostrar.
+     * @param tipo Tipo de mensaje ("Error" o "Info").
+     * @param titulo Título del cuadro de diálogo.
      */
     public void mostrarError(String mensaje, String tipo, String titulo) {
         JOptionPane optionPane = new JOptionPane(mensaje);

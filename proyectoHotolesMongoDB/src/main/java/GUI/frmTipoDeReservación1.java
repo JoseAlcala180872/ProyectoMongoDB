@@ -3,17 +3,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package GUI;
+
 import Dominio.AgenciaDeViajes;
 import Dominio.Cliente;
 import Dominio.Persona;
+
 /**
- *
- * @author YeisiPC
+ * Clase que representa el formulario 'frmTipoDeReservación1'. Este formulario
+ * se utiliza para permitir al usuario elegir entre hacer una reservación como
+ * cliente personal o como cliente de una agencia de viajes.
  */
 public class frmTipoDeReservación1 extends javax.swing.JFrame {
 
     /**
-     * Creates new form frmTipoDeReservación
+     * Constructor de la clase 'frmTipoDeReservación1'. Inicializa y muestra los
+     * componentes gráficos del formulario.
      */
     public frmTipoDeReservación1() {
         initComponents();
@@ -71,20 +75,30 @@ public class frmTipoDeReservación1 extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+ /**
+     * Maneja el evento de clic en el botón "btnEleccionPersonal". Abre el
+     * formulario de registro para cliente personal.
+     *
+     * @param evt Evento de acción.
+     */
     private void btnEleccionPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEleccionPersonalActionPerformed
         // TODO add your handling code here:
         Cliente cliente = new Persona();
-        
+
         frmPersona1 personaFrame = new frmPersona1(cliente);
         personaFrame.setVisible(true);
-        this.dispose(); 
+        this.dispose();
     }//GEN-LAST:event_btnEleccionPersonalActionPerformed
-
+    /**
+     * Maneja el evento de clic en el botón "btnEleccionAgencia". Abre el
+     * formulario de registro para cliente de agencia de viajes.
+     *
+     * @param evt Evento de acción.
+     */
     private void btnEleccionAgenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEleccionAgenciaActionPerformed
         // TODO add your handling code here:
         Cliente cliente = new AgenciaDeViajes();
-     
+
         frmAgenciaDeViajes1 agenciaFrame = new frmAgenciaDeViajes1(cliente);
         agenciaFrame.setVisible(true);
         this.dispose();

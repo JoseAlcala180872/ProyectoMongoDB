@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package GUI;
+
 import Dominio.AgenciaDeViajes;
 import Dominio.Cliente;
 import Excepciones.BOException;
@@ -29,7 +30,7 @@ public class frmAgenciaDeViajes1 extends javax.swing.JFrame {
     private AgenciaDeViajesBO agenciaBO;
     private ClienteBO clienteBO;
     private String personaReservacion;
-    
+
     public frmAgenciaDeViajes1(Cliente cliente) {
         initComponents();
         this.cliente = cliente;
@@ -108,194 +109,210 @@ public class frmAgenciaDeViajes1 extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+/**
+     * Realiza la validación de los campos de entrada y registra una nueva
+     * agencia de viajes. Muestra mensajes de error en caso de campos inválidos.
+     *
+     * @param evt Evento de acción al hacer clic en el botón de registrar.
+     */
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-        try{
+        try {
             String nombre = txtNombre.getText();
             String direccion = txtDireccion.getText();
             String telefono = txtTelefono.getText();
             String personaReservacion = txtPersona.getText();
-            
-            if(validacionNombre(nombre)!= null && validacionNombre(personaReservacion)!= null){
-                if(validacionTelefono(telefono)!= null){
-                    if(validacionDireccion(direccion) != null){
-                    if(validacionCliente(nombre) == null){
-                        this.cliente.setNombre(validacionNombre(nombre));
-                        this.cliente.setDireccion(validacionDireccion(direccion));
-                        this.cliente.setTelefono(validacionTelefono(telefono));
-                        this.personaReservacion = validacionNombre(personaReservacion);
-                        this.cliente = obtenerAgencia(this.cliente, this.personaReservacion);
 
-                        frmHotel1 hotelFrame = new frmHotel1(this.cliente);
+            if (validacionNombre(nombre) != null && validacionNombre(personaReservacion) != null) {
+                if (validacionTelefono(telefono) != null) {
+                    if (validacionDireccion(direccion) != null) {
+                        if (validacionCliente(nombre) == null) {
+                            this.cliente.setNombre(validacionNombre(nombre));
+                            this.cliente.setDireccion(validacionDireccion(direccion));
+                            this.cliente.setTelefono(validacionTelefono(telefono));
+                            this.personaReservacion = validacionNombre(personaReservacion);
+                            this.cliente = obtenerAgencia(this.cliente, this.personaReservacion);
 
-                        hotelFrame.setVisible(true);
-                        this.dispose();
-                    }else{
-                        JOptionPane.showMessageDialog(null, "La agencia ya existe");
-                        this.cliente = validacionCliente(nombre);
-                        this.personaReservacion = validacionNombre(personaReservacion);
-                        this.cliente = obtenerAgencia(this.cliente, this.personaReservacion);
-                        new frmHotel1(this.cliente).setVisible(true);
-                        this.dispose();
-                    }
-                }else{
+                            frmHotel1 hotelFrame = new frmHotel1(this.cliente);
+
+                            hotelFrame.setVisible(true);
+                            this.dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "La agencia ya existe");
+                            this.cliente = validacionCliente(nombre);
+                            this.personaReservacion = validacionNombre(personaReservacion);
+                            this.cliente = obtenerAgencia(this.cliente, this.personaReservacion);
+                            new frmHotel1(this.cliente).setVisible(true);
+                            this.dispose();
+                        }
+                    } else {
                         mostrarError("No campos vacíos", "Error", "Error al registrar");
-                    }  
-                }else{
+                    }
+                } else {
                     mostrarError("Solo puedes poner números en el teléfono, máximo 16 digitos. No campos vacíos", "Error", "Error al registrar");
                 }
-            }else{
-                 mostrarError("Solo puedes poner letras en el nombre. No campos vacíos", "Error", "Error al registrar");
+            } else {
+                mostrarError("Solo puedes poner letras en el nombre. No campos vacíos", "Error", "Error al registrar");
             }
-            
-        }catch (BOException e){
-            Logger.getLogger(frmPersona.class.getName()).log(Level.SEVERE, null, e);
+
+        } catch (BOException e) {
+            Logger.getLogger(frmPersona1.class.getName()).log(Level.SEVERE, null, e);
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     /**
-     * 
-     * @param cliente 
+     * Actualiza la información de la agencia asociada al cliente en la base de
+     * datos.
+     *
+     * @param cliente Cliente asociado a la agencia.
+     * @param personaReservacion Nombre de la persona de reservación.
      */
-    public void actualizarAgencia(Cliente cliente, String personaReservacion){
-        try{
-            AgenciaDeViajes agencia =  agenciaBO.buscarPorCliente(cliente.getId());
+    public void actualizarAgencia(Cliente cliente, String personaReservacion) {
+        try {
+            AgenciaDeViajes agencia = agenciaBO.buscarPorCliente(cliente.getId());
             agencia.setPersonaReservacion(personaReservacion);
             agenciaBO.actualizar(agencia);
-        }catch(BOException e){
-            Logger.getLogger(frmPersona.class.getName()).log(Level.SEVERE, null, e);
+        } catch (BOException e) {
+            Logger.getLogger(frmPersona1.class.getName()).log(Level.SEVERE, null, e);
         }
-        
+
     }
+
     /**
-     * 
+     *
      * @param registrarAgencia
      * @return
-     * @throws BOException 
+     * @throws BOException
      */
-    private Cliente registrarAgencia(Cliente registrarCliente, String personaReservacion) throws BOException{
-        
-        try{
+    private Cliente registrarAgencia(Cliente registrarCliente, String personaReservacion) throws BOException {
+
+        try {
             Cliente clienteRegistrado = clienteBO.insertar(registrarCliente);
             this.agencia = new AgenciaDeViajes(clienteRegistrado.getNombre(), clienteRegistrado.getDireccion(), clienteRegistrado.getTelefono(), clienteRegistrado, personaReservacion);
             AgenciaDeViajes agenciaRegistrado = agenciaBO.insertar(this.agencia);
             return clienteRegistrado;
-        }catch(BOException e){
+        } catch (BOException e) {
             throw new BOException(e.getMessage(), e);
         }
-        
-        
+
     }
-    
+
     /**
-     * 
+     *
      * @param buscarCliente
      * @return
-     * @throws BOException 
+     * @throws BOException
      */
-    private Cliente obtenerAgencia(Cliente buscarCliente, String personaReservacion) throws BOException{
+    private Cliente obtenerAgencia(Cliente buscarCliente, String personaReservacion) throws BOException {
         Cliente clienteObtenido;
-        try{
+        try {
             clienteObtenido = registrarAgencia(buscarCliente, personaReservacion);
             clienteObtenido = clienteBO.buscar(clienteObtenido.getId());
-            
+
             return clienteObtenido;
-        }catch(BOException e){
+        } catch (BOException e) {
             throw new BOException(e.getMessage(), e);
         }
-       
+
     }
-    
+
     /**
-     * 
-     * @param nombre
-     * @return
-     * @throws BOException 
+     * Realiza la validación del Cliente, buscándolo en la base de datos por su
+     * nombre.
+     *
+     * @param nombre Nombre del Cliente a validar.
+     * @return Cliente si existe, o null si no se encuentra.
+     * @throws BOException Excepción de lógica de negocio.
      */
-    public Cliente validacionCliente(String nombre) throws BOException{
-        
-        try{
+    public Cliente validacionCliente(String nombre) throws BOException {
+
+        try {
             Cliente cliente = this.clienteBO.buscar(nombre);
-            if(cliente != null){
+            if (cliente != null) {
                 return cliente;
             }
-            
-        }catch(BOException e){
+
+        } catch (BOException e) {
             throw new BOException(e.getMessage(), e);
         }
-        
+
         return null;
     }
-    
+
     /**
-     * 
-     * @param nombre
-     * @return 
+     * Realiza la validación del nombre, eliminando espacios en blanco
+     * innecesarios, permitiendo solo letras y algunos caracteres especiales.
+     *
+     * @param nombre Nombre a validar.
+     * @return Nombre válido sin espacios innecesarios o null si es inválido.
      */
     private String validacionNombre(String nombre) {
-        
+
         String nombreSinEspacios = nombre.trim();
-        
+
         // Reemplazar múltiples espacios en el medio por un solo espacio
         nombreSinEspacios = nombreSinEspacios.replaceAll("\\s+", " ");
 
-        
         Pattern patronSoloLetras = Pattern.compile("^[a-zA-Z\\s'-]+$");
         Matcher matcher = patronSoloLetras.matcher(nombreSinEspacios);
-        
-        if(!nombreSinEspacios.isEmpty() && matcher.matches()){
+
+        if (!nombreSinEspacios.isEmpty() && matcher.matches()) {
             return nombreSinEspacios;
-        }else{
+        } else {
             return null;
-        }  
-        
+        }
+
     }
-    
-     /**
-     * 
-     * @param direccion
-     * @return 
+
+    /**
+     * Realiza la validación de la dirección, eliminando espacios en blanco
+     * innecesarios.
+     *
+     * @param direccion Dirección a validar.
+     * @return Dirección válida sin espacios innecesarios o null si es inválida.
      */
-    private String validacionDireccion(String direccion){
+    private String validacionDireccion(String direccion) {
         String direccionSinEspacios = direccion.trim();
-        
+
         // Reemplazar múltiples espacios en el medio por un solo espacio
         direccionSinEspacios = direccionSinEspacios.replaceAll("\\s+", " ");
-        
-        if(!direccionSinEspacios.isEmpty()){
+
+        if (!direccionSinEspacios.isEmpty()) {
             return direccionSinEspacios;
-        }else{
+        } else {
             return null;
         }
     }
-    
+
     /**
-     * 
-     * @param telefono
-     * @return 
+     * Realiza la validación del número de teléfono, permitiendo solo números y
+     * eliminando espacios.
+     *
+     * @param telefono Número de teléfono a validar.
+     * @return Número de teléfono válido sin espacios o null si es inválido.
      */
-    private String validacionTelefono(String telefono){
-        
+    private String validacionTelefono(String telefono) {
+
         String telefonoSinEspacios = telefono.replaceAll("\\s", "");
 
         // Modificar el patrón para permitir solo números
         Pattern patronSoloNumeros = Pattern.compile("^[0-9]+$");
         Matcher matcher = patronSoloNumeros.matcher(telefonoSinEspacios);
 
-        if(!telefonoSinEspacios.isEmpty() && matcher.matches()){
+        if (!telefonoSinEspacios.isEmpty() && matcher.matches()) {
             return telefonoSinEspacios;
-        }else{
+        } else {
             return null;
         }
-     
+
     }
-    
+
     /**
-     * 
-     * @param mensaje
-     * @param tipo
-     * @param titulo 
+     * Muestra un cuadro de diálogo con un mensaje de error o información.
+     *
+     * @param mensaje Mensaje a mostrar.
+     * @param tipo Tipo de mensaje ("Error" o "Info").
+     * @param titulo Título del cuadro de diálogo.
      */
     public void mostrarError(String mensaje, String tipo, String titulo) {
         JOptionPane optionPane = new JOptionPane(mensaje);
@@ -308,8 +325,7 @@ public class frmAgenciaDeViajes1 extends javax.swing.JFrame {
         dialog.setAlwaysOnTop(true);
         dialog.setVisible(true);
     }
-    
-   
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;

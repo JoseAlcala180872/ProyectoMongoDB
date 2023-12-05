@@ -15,6 +15,9 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
+ * Formulario para mostrar la lista de hoteles y permitir al usuario seleccionar
+ * uno. Luego, se abre el formulario de habitaciones correspondiente al hotel
+ * seleccionado.
  *
  * @author YeisiPC
  */
@@ -22,9 +25,11 @@ public class frmHotel1 extends javax.swing.JFrame {
 
     private final HotelBO hotelBO;
     private Cliente clienteRegistrado;
+
     /**
      * Creates new form frmHotel
-     * @param cliente
+     *
+     * @param clienteRegistrado Cliente que ha iniciado sesión.
      */
     public frmHotel1(Cliente clienteRegistrado) {
 
@@ -41,7 +46,7 @@ public class frmHotel1 extends javax.swing.JFrame {
     }
 
     /**
-     * 
+     * Método para cargar los datos de los hoteles en la tabla.
      */
     private void cargarDatosEnTabla() {
         try {
@@ -71,7 +76,7 @@ public class frmHotel1 extends javax.swing.JFrame {
 
             // Establecer el modelo de tabla a la jTableHoteles
             tablaHoteles.setModel(model);
-            
+
         } catch (BOException ex) {
             Logger.getLogger(frmHotel1.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -137,7 +142,13 @@ public class frmHotel1 extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+ /**
+     * Método invocado al hacer clic en el botón "Seleccionar Hotel". Obtiene el
+     * hotel seleccionado y abre el formulario de habitaciones.
+     *
+     * @param evt Evento de acción al hacer clic en el botón "Seleccionar
+     * Hotel".
+     */
     private void btnSeleccionarHotelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarHotelActionPerformed
         // TODO add your handling code here:
         int indiceHotel = tablaHoteles.getSelectedRow();
@@ -159,6 +170,7 @@ public class frmHotel1 extends javax.swing.JFrame {
             e.printStackTrace(); // Puedes considerar mostrar un mensaje de error adicional aquí
     }//GEN-LAST:event_btnSeleccionarHotelActionPerformed
     }
+
     /**
      * @param args the command line arguments
      */
