@@ -90,10 +90,10 @@ public class ClienteBO {
      * @return
      * @throws BOException 
      */
-    public Cliente buscar(int idSistema) throws BOException{
+    public Cliente buscar(String nombre) throws BOException{
         
         try{
-            return clienteDAO.buscar(idSistema);
+            return clienteDAO.buscar(nombre);
         }catch (PersistenciaException e){
             throw new BOException(e.getMessage(), e);
         }

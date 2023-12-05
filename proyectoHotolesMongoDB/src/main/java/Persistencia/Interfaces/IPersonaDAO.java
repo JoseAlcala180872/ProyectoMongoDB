@@ -5,7 +5,6 @@
 package Persistencia.Interfaces;
 import Dominio.Persona;
 import Excepciones.PersistenciaException;
-import java.util.List;
 import org.bson.types.ObjectId;
 /**
  *
@@ -13,9 +12,7 @@ import org.bson.types.ObjectId;
  */
 public interface IPersonaDAO {
     public Persona insertar(Persona insertarPersona) throws PersistenciaException;
-//    public Persona actualizar(Persona actualizarPersona) throws PersistenciaException;
     public Persona eliminar(Persona eliminarPersona) throws PersistenciaException;
-    public List<Persona> obtenerTodosLosHoteles() throws PersistenciaException;
     public Persona buscar(ObjectId id) throws PersistenciaException;
    
 }

@@ -4,18 +4,23 @@
  */
 package GUI;
 import Dominio.Reservacion;
+import Excepciones.BOException;
+import Negocio.ReservacionBO;
+import javax.swing.JOptionPane;
 /**
  *
  * @author YeisiPC
  */
 public class frmReporteDeReservación extends javax.swing.JFrame {
 
+    private ReservacionBO reservacionBO;
     private Reservacion reservacion;
     /**
      * Creates new form frmReporteDeReservación
      */
     public frmReporteDeReservación(Reservacion reservacion) {
         initComponents();
+        this.reservacionBO = new ReservacionBO();
         this.reservacion = reservacion;
         
         String nombreCliente = this.reservacion.getCliente().getNombre();
@@ -55,7 +60,6 @@ public class frmReporteDeReservación extends javax.swing.JFrame {
         lbHabitacion = new javax.swing.JLabel();
         lbCategoria = new javax.swing.JLabel();
         lbNombre = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,7 +70,6 @@ public class frmReporteDeReservación extends javax.swing.JFrame {
         Cliente.setText("Nombre:");
 
         btnRealizarReservación.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnRealizarReservación.setIcon(new javax.swing.ImageIcon("C:\\Users\\YeisiPC\\Documents\\GitHub\\ProyectoHotelesMongoDB\\toolbar\\Disc_Drive.png")); // NOI18N
         btnRealizarReservación.setText("Realizar reservción");
         btnRealizarReservación.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -107,9 +110,6 @@ public class frmReporteDeReservación extends javax.swing.JFrame {
         lbNombre.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lbNombre.setText("jLabel12");
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel7.setText("jLabel7");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -127,9 +127,7 @@ public class frmReporteDeReservación extends javax.swing.JFrame {
                                 .addComponent(lbTarifa, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(lbNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
-                                .addComponent(jLabel7))))
+                                .addComponent(lbNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -149,9 +147,8 @@ public class frmReporteDeReservación extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnRealizarReservación)
-                                    .addComponent(lbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(66, 66, 66))
+                                    .addComponent(lbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addContainerGap(134, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
@@ -165,8 +162,7 @@ public class frmReporteDeReservación extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Cliente)
-                    .addComponent(lbNombre)
-                    .addComponent(jLabel7))
+                    .addComponent(lbNombre))
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -197,9 +193,17 @@ public class frmReporteDeReservación extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRealizarReservaciónActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarReservaciónActionPerformed
-        frmInicial ini= new frmInicial();
-        ini.setVisible(true);
-        this.setVisible(false);
+        
+        try{
+            this.reservacionBO.insertar(this.reservacion);
+            JOptionPane.showMessageDialog(null, "Reservación realizada correctamente");
+            frmInicial ini= new frmInicial();
+            ini.setVisible(true);
+            this.dispose();
+        }catch(BOException e){
+            e.printStackTrace();
+        }
+        
         
     }//GEN-LAST:event_btnRealizarReservaciónActionPerformed
 
@@ -247,7 +251,6 @@ public class frmReporteDeReservación extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel lbCategoria;
     private javax.swing.JLabel lbHabitacion;
     private javax.swing.JLabel lbHotel;

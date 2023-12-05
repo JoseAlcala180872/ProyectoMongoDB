@@ -88,11 +88,6 @@ public class AgenciaDeViajesDAO implements IAgenciaDeViajesDAO{
         return eliminarAgenciaDeViajes;
     }
 
-    @Override
-    public List<AgenciaDeViajes> obtenerTodosLosHoteles() throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
     /**
      * 
      * @param id

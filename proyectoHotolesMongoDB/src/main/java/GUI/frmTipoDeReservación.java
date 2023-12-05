@@ -35,7 +35,6 @@ public class frmTipoDeReservación extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnEleccionPersonal.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnEleccionPersonal.setIcon(new javax.swing.ImageIcon("C:\\Users\\YeisiPC\\Documents\\GitHub\\ProyectoHotelesMongoDB\\toolbar\\Security_Card.png")); // NOI18N
         btnEleccionPersonal.setText("Personal");
         btnEleccionPersonal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -44,7 +43,6 @@ public class frmTipoDeReservación extends javax.swing.JFrame {
         });
 
         btnEleccionAgencia.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnEleccionAgencia.setIcon(new javax.swing.ImageIcon("C:\\Users\\YeisiPC\\Documents\\GitHub\\ProyectoHotelesMongoDB\\toolbar\\Globe.png")); // NOI18N
         btnEleccionAgencia.setText("Agencia de viajes");
         btnEleccionAgencia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -60,22 +58,23 @@ public class frmTipoDeReservación extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(btnEleccionPersonal)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                .addComponent(btnEleccionAgencia)
-                .addGap(24, 24, 24))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(106, 106, 106)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(btnEleccionPersonal)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEleccionAgencia))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(106, 106, 106)
+                        .addComponent(jLabel1)))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEleccionPersonal)
                     .addComponent(btnEleccionAgencia))
@@ -87,16 +86,12 @@ public class frmTipoDeReservación extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEleccionPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEleccionPersonalActionPerformed
-        // Create an instance of frmHotel
+        
         Cliente cliente = new Persona();
         
         frmPersona personaFrame = new frmPersona(cliente);
-
-        // Make the frmHotel frame visible
         personaFrame.setVisible(true);
-
-        // Close the current frame if needed
-        this.dispose(); // Add this line if you want to close the current frame
+        this.dispose(); 
     }//GEN-LAST:event_btnEleccionPersonalActionPerformed
 
     private void btnEleccionAgenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEleccionAgenciaActionPerformed

@@ -15,7 +15,6 @@ public interface IClienteDAO {
     public Cliente insertar(Cliente insertarCliente) throws PersistenciaException;
     public Cliente actualizar(Cliente actualizarCliente) throws PersistenciaException;
     public Cliente eliminar(Cliente eliminarCliente) throws PersistenciaException;
-    public List<Cliente> obtenerTodosLosHoteles() throws PersistenciaException;
     public Cliente buscar(ObjectId id) throws PersistenciaException;
-    public Cliente buscar(int idSistema) throws PersistenciaException;
+    public Cliente buscar(String nombre) throws PersistenciaException;
 }

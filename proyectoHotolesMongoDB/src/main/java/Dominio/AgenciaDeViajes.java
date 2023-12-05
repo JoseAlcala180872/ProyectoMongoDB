@@ -17,39 +17,17 @@ public class AgenciaDeViajes extends Cliente{
         
     }
     
-    /**
-     * 
-     * @param _id
-     * @param personaReservacion
-     * @param cliente 
-     */
     public AgenciaDeViajes(ObjectId _id, String personaReservacion, Cliente cliente){
         super(_id);
         this.personaReservacion = personaReservacion;
         this.cliente = cliente;
     }
-    
     /**
      * 
      * @param personaReservacion
      * @param cliente 
      */
     public AgenciaDeViajes(String personaReservacion, Cliente cliente){
-        
-        this.personaReservacion = personaReservacion;
-        this.cliente = cliente;
-    }
-    
-    /**
-     * 
-     * @param nombre
-     * @param direccion
-     * @param telefono
-     * @param personaReservacion
-     * @param cliente 
-     */
-    public AgenciaDeViajes(String nombre, String direccion, String telefono, String personaReservacion, Cliente cliente) {
-        super(nombre, direccion, telefono);
         this.personaReservacion = personaReservacion;
         this.cliente = cliente;
     }

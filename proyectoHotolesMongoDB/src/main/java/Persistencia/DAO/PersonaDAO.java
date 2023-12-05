@@ -50,49 +50,7 @@ public class PersonaDAO implements IPersonaDAO{
         }
         
         return insertarPersona;
-    }
-
-    /**
-     * 
-     * @param actualizarPersona
-     * @return
-     * @throws PersistenciaException 
-     */
-//    @Override
-//    public Persona actualizar(Persona actualizarPersona) throws PersistenciaException {
-//         Bson filtro = Filters.eq("_id", actualizarPersona.getId());
-//         Bson filtroCliente = Filters.eq("_idCliente", actualizarPersona.getCliente().getId());
-//        try {
-//            Document persona = coleccion.find(filtroCliente).first();
-//
-//            ObjectId clienteId = persona.getObjectId("_idCliente");
-//
-//            // Buscamos la categoría correspondiente en su respectiva colección
-//            ClienteDAO cDAO = new ClienteDAO();
-//            Cliente cliente = cDAO.buscar(clienteId);
-//            cDAO.actualizar(cliente);
-//            
-//            Document personaDocument = new Document()
-//                    .append("nombre", actualizarPersona.getNombre())
-//                    .append("direccion", actualizarPersona.getDireccion())
-//                    .append("telefono", actualizarPersona.getTelefono())
-//                    .append("_idCliente", actualizarPersona.getCliente().getId());
-//
-////            Document clienteDocument = new Document()
-////                    .append("nombre", actualizarPersona.getNombre())
-////                    .append("direccion", actualizarPersona.getDireccion())
-////                    .append("telefono", actualizarPersona.getTelefono());
-//            
-//            Document actualizacion = new Document("$set", personaDocument);
-//            
-//            UpdateResult updateResult = coleccion.updateOne(filtro, actualizacion);
-//
-//        } catch (Exception e) {
-//            throw new PersistenciaException("Error al actualizar actualizar:" + e.getMessage());
-//        }
-//
-//        return actualizarPersona;
-//    }
+    }     
 
     /**
      * 
@@ -111,11 +69,6 @@ public class PersonaDAO implements IPersonaDAO{
         }
 
         return eliminarPersona;
-    }
-
-    @Override
-    public List<Persona> obtenerTodosLosHoteles() throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     /**

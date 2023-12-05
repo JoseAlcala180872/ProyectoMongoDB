@@ -73,7 +73,6 @@ public class frmPersona extends javax.swing.JFrame {
         txtTelefono.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
         btnRegistar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnRegistar.setIcon(new javax.swing.ImageIcon("C:\\Users\\YeisiPC\\Documents\\GitHub\\ProyectoHotelesMongoDB\\toolbar\\Disc_Drive.png")); // NOI18N
         btnRegistar.setText("Registrar");
         btnRegistar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,25 +143,36 @@ public class frmPersona extends javax.swing.JFrame {
             String direccion = txtDireccion.getText();
             String telefono = txtTelefono.getText();
             
-            if(validacionNombre(nombre)){
-                if(validacionTelefono(telefono)){
+            if(validacionNombre(nombre) != null){
+                if(validacionTelefono(telefono) != null){
+                    if(validacionDireccion(direccion) != null){
+                    if(validacionCliente(nombre) == null){
                     
-                    this.cliente.setNombre(nombre);
-                    this.cliente.setDireccion(direccion);
-                    this.cliente.setTelefono(telefono);
+                        this.cliente.setNombre(validacionNombre(nombre));
+                        this.cliente.setDireccion(direccion);
+                        this.cliente.setTelefono(validacionTelefono(telefono));
 
-                    this.cliente = obtenerPersona(this.cliente);
+                        this.cliente = obtenerPersona(this.cliente);
 
-                    frmHotel hotelFrame = new frmHotel(this.cliente);
+                        frmHotel hotelFrame = new frmHotel(this.cliente);
 
-                    hotelFrame.setVisible(true);
-                    this.dispose();
+                        hotelFrame.setVisible(true);
+                        this.dispose();
+                        
+                    }else{
+                        JOptionPane.showMessageDialog(null, "La persona ya existe");
+                        this.cliente = validacionCliente(nombre);
+                        new frmHotel(this.cliente).setVisible(true);
+                        this.dispose();
+                    }      
                 }else{
-                    mostrarError("Solo puedes poner números en el teléfono, máximo 16 digitos", "Error", "Error al registrar");
+                    mostrarError("No campos vacíos", "Error", "Error al registrar");
                 }
-                
+                }else{
+                     mostrarError("Solo puedes poner números en el teléfono, máximo 16 digitos. No campos vacíos", "Error", "Error al registrar");   
+                } 
             }else{
-                mostrarError("Solo puedes poner letras en el nombre", "Error", "Error al registrar");
+                mostrarError("Solo puedes poner letras en el nombre. No campos vacíos", "Error", "Error al registrar");
             }
             
         }catch (BOException e){
@@ -213,9 +223,30 @@ public class frmPersona extends javax.swing.JFrame {
     /**
      * 
      * @param nombre
+     * @return
+     * @throws BOException 
+     */
+    public Cliente validacionCliente(String nombre) throws BOException{
+        
+        try{
+            Cliente cliente = this.clienteBO.buscar(nombre);
+            if(cliente != null){
+                return cliente;
+            }
+            
+        }catch(BOException e){
+            throw new BOException(e.getMessage(), e);
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 
+     * @param nombre
      * @return 
      */
-    private boolean validacionNombre(String nombre) {
+    private String validacionNombre(String nombre) {
         
         String nombreSinEspacios = nombre.trim();
         
@@ -223,11 +254,33 @@ public class frmPersona extends javax.swing.JFrame {
         nombreSinEspacios = nombreSinEspacios.replaceAll("\\s+", " ");
 
         
-        Pattern patronSoloLetras = Pattern.compile("^[a-zA-Z]+$");
+        Pattern patronSoloLetras = Pattern.compile("^[a-zA-Z\\s'-]+$");
         Matcher matcher = patronSoloLetras.matcher(nombreSinEspacios);
         
-        return !nombreSinEspacios.isEmpty() && matcher.matches();
+        if(!nombreSinEspacios.isEmpty() && matcher.matches()){
+            return nombreSinEspacios;
+        }else{
+            return null;
+        }  
         
+    }
+    
+    /**
+     * 
+     * @param direccion
+     * @return 
+     */
+    private String validacionDireccion(String direccion){
+        String direccionSinEspacios = direccion.trim();
+        
+        // Reemplazar múltiples espacios en el medio por un solo espacio
+        direccionSinEspacios = direccionSinEspacios.replaceAll("\\s+", " ");
+        
+        if(!direccionSinEspacios.isEmpty()){
+            return direccionSinEspacios;
+        }else{
+            return null;
+        }
     }
     
     /**
@@ -235,12 +288,19 @@ public class frmPersona extends javax.swing.JFrame {
      * @param telefono
      * @return 
      */
-    private boolean validacionTelefono(String telefono){
+    private String validacionTelefono(String telefono){
         
-        Pattern patronSoloNumeros = Pattern.compile("/^[0-9]+$/");
-        Matcher matcher = patronSoloNumeros.matcher(telefono);
-        
-        return matcher.matches();
+         String telefonoSinEspacios = telefono.replaceAll("\\s", "");
+
+        // Modificar el patrón para permitir solo números
+        Pattern patronSoloNumeros = Pattern.compile("^[0-9]+$");
+        Matcher matcher = patronSoloNumeros.matcher(telefonoSinEspacios);
+
+        if(!telefonoSinEspacios.isEmpty() && matcher.matches()){
+            return telefonoSinEspacios;
+        }else{
+            return null;
+        }
      
     }
     

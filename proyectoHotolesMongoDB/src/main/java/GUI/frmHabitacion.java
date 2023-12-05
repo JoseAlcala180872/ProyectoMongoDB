@@ -8,15 +8,9 @@ import Dominio.Cliente;
 import Dominio.Habitacion;
 import Dominio.Hotel;
 import Dominio.Reservacion;
-import Persistencia.Interfaces.IReservacionDAO;
-import Persistencia.DAO.ReservacionDAO;
 import Excepciones.BOException;
 import Negocio.HabitacionBO;
-import Negocio.ReservacionBO;
-import Excepciones.PersistenciaException;
-import Persistencia.DAO.HabitacionDAO;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.Period;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -33,8 +27,6 @@ public class frmHabitacion extends javax.swing.JFrame {
     private final HabitacionBO habitacionBO;
     private Hotel hotelSeleccionado;
     private Cliente clienteRegistrado;
-    private IReservacionDAO reservacionDAO;
-    private ReservacionBO reservacionBO;
     private Reservacion reservacion = new Reservacion();
 
     /**
@@ -45,8 +37,6 @@ public class frmHabitacion extends javax.swing.JFrame {
      */
     public frmHabitacion(Cliente clienteRegistrado, Hotel hotelSeleccionado) {
         initComponents();
-        this.reservacionBO = new ReservacionBO();
-        this.reservacionDAO = new ReservacionDAO();
         this.clienteRegistrado = clienteRegistrado;
         this.hotelSeleccionado = hotelSeleccionado;
         habitacionBO = new HabitacionBO();
@@ -126,7 +116,6 @@ public class frmHabitacion extends javax.swing.JFrame {
 
         jLabel3.setText("Fecha final");
 
-        btnReservar.setIcon(new javax.swing.ImageIcon("C:\\Users\\YeisiPC\\Documents\\GitHub\\ProyectoHotelesMongoDB\\toolbar\\Disc_Drive.png")); // NOI18N
         btnReservar.setText("Reservar");
         btnReservar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -138,7 +127,6 @@ public class frmHabitacion extends javax.swing.JFrame {
 
         jLabel5.setText("Precio:");
 
-        btnCalcular.setIcon(new javax.swing.ImageIcon("C:\\Users\\YeisiPC\\Documents\\GitHub\\ProyectoHotelesMongoDB\\toolbar\\Calc.png")); // NOI18N
         btnCalcular.setText("Calcular");
         btnCalcular.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -151,40 +139,47 @@ public class frmHabitacion extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(95, 95, 95)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(109, 109, 109))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(201, 201, 201)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblPrecio)
-                    .addComponent(lblDias))
-                .addContainerGap(345, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(calendarioFechaInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnReservar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(calendarioFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCalcular))
-                .addGap(26, 26, 26))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(291, 291, 291)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblPrecio)
+                            .addComponent(lblDias)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(95, 95, 95)
+                        .addComponent(jLabel2)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(95, 133, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(266, 266, 266))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(128, 128, 128))))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(27, 27, 27)
+                            .addComponent(calendarioFechaInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(98, 98, 98)
+                            .addComponent(btnReservar)))
+                    .addComponent(jLabel5))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(calendarioFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(84, 84, 84)
+                        .addComponent(btnCalcular)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -193,27 +188,30 @@ public class frmHabitacion extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(58, 58, 58)
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(calendarioFechaInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(calendarioFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnReservar)
-                    .addComponent(btnCalcular))
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(lblDias))
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(lblPrecio))
-                .addContainerGap(24, Short.MAX_VALUE))
+                    .addComponent(calendarioFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calendarioFechaInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(129, 129, 129)
+                        .addComponent(lblDias)
+                        .addGap(28, 28, 28)
+                        .addComponent(lblPrecio))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnReservar)
+                            .addComponent(btnCalcular))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel5)))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
@@ -259,18 +257,16 @@ public class frmHabitacion extends javax.swing.JFrame {
             reservacion.setCategoriaHotel(this.hotelSeleccionado);
             reservacion.setClaseHabitacion(habitacionSeleccionada);
             reservacion.setPeriodoEstancia(obtenerPeriodo());
+            reservacion.getClaseHabitacion().setIsAsignado(true);
             reservacion.setCliente(this.clienteRegistrado);
-
-            this.reservacionBO.insertar(reservacion);
+            habitacionBO.actualizar(reservacion.getClaseHabitacion());
             new frmReporteDeReservación(this.reservacion).setVisible(true);
             this.dispose();
         } catch (BOException e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_btnReservarActionPerformed
-    private void mostrarError(String mensaje) {
-        JOptionPane.showMessageDialog(errorPanel, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-    }
+    
     private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularActionPerformed
         try {
             int indiceHabitacion = tablaHabitacion.getSelectedRow();
@@ -288,13 +284,10 @@ public class frmHabitacion extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-//        txtDiasReservados.setText(dias.toString());
-//        txtPrecioFinal.setText(String.valueOf(precioFinal));
     }//GEN-LAST:event_btnCalcularActionPerformed
 
     /**
-     * @param args the command line arguments
+     * @return 
      */
     public Integer obtenerPeriodo() {
         LocalDate fechaSeleccionadaInicial = calendarioFechaInicial.getSelectedDate();
@@ -332,6 +325,14 @@ public class frmHabitacion extends javax.swing.JFrame {
         lblPrecio.setText(String.valueOf(precioNeto));
         System.out.println("" + precioNeto + dias);
         return precioNeto;
+    }
+    
+    /**
+     * 
+     * @param mensaje 
+     */
+    private void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(errorPanel, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

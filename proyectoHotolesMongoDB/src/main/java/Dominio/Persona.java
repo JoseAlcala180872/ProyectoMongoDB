@@ -20,6 +20,7 @@ public class Persona extends Cliente{
         super(_id);
         this.cliente = cliente;
     }
+    
     public Persona(String nombre, String direccion, String telefono) {
         super(nombre, direccion, telefono);
     }

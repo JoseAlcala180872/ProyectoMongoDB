@@ -116,7 +116,6 @@ public class frmHotel extends javax.swing.JFrame {
         }
 
         btnSeleccionarHotel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnSeleccionarHotel.setIcon(new javax.swing.ImageIcon("C:\\Users\\YeisiPC\\Documents\\GitHub\\ProyectoHotelesMongoDB\\toolbar\\Tips.png")); // NOI18N
         btnSeleccionarHotel.setText("Seleccionar");
         btnSeleccionarHotel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

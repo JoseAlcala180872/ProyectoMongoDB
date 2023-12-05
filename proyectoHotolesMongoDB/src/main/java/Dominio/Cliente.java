@@ -10,70 +10,43 @@ import org.bson.types.ObjectId;
  */
 public class Cliente {
     private ObjectId _id;
-    private int idSistema;
     private String nombre;
     private String direccion;
     private String telefono;
-//    private String personaReservacion;
 
-    public Cliente(){
-        
+    public Cliente() {
+
     }
-    
-    /**
-     * 
-     * @param _id 
-     */
+
     public Cliente(ObjectId _id){
         this._id = _id;
     }
     /**
-     * 
+     *
      * @param _id
      * @param idSistema
      * @param nombre
      * @param direccion
-     * @param telefono 
+     * @param telefono
      */
-    public Cliente(ObjectId _id,int idSistema, String nombre, String direccion, String telefono) {
-        this._id = _id;
-        this.idSistema = idSistema;
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.telefono = telefono;
-    }
-    
-    /**
-     * 
-     * @param _id
-     * @param nombre
-     * @param direccion
-     * @param telefono 
-     */
-    public Cliente(ObjectId _id,String nombre, String direccion, String telefono){
+    public Cliente(ObjectId _id, String nombre, String direccion, String telefono) {
         this._id = _id;
         this.nombre = nombre;
         this.direccion = direccion;
         this.telefono = telefono;
     }
+
     /**
-     * 
+     *
      * @param nombre
      * @param direccion
-     * @param telefono 
+     * @param telefono
      */
     public Cliente(String nombre, String direccion, String telefono) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.telefono = telefono;
     }
-//    
-//    public Cliente(String nombre, String direccion, String telefono) {
-//        this.nombre = nombre;
-//        this.direccion = direccion;
-//        this.telefono = telefono;
-//        
-//    }
 
     public ObjectId getId() {
         return _id;
@@ -107,22 +80,7 @@ public class Cliente {
         this.telefono = telefono;
     }
 
-    public int getIdSistema() {
-        return idSistema;
+ 
     }
-
-    public void setIdSistema(int idSistema) {
-        this.idSistema = idSistema;
-    }
-
-//    public String getPersonaReservacion() {
-//        return personaReservacion;
-//    }
-//
-//    public void setPersonaReservacion(String personaReservacion) {
-//        this.personaReservacion = personaReservacion;
-//    }
     
     
-    
-}

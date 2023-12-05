@@ -10,11 +10,8 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import Persistencia.Interfaces.IClienteDAO;
 import Excepciones.PersistenciaException;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.UpdateResult;
-import java.util.ArrayList;
-import java.util.List;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 /**
@@ -25,7 +22,6 @@ public class ClienteDAO implements IClienteDAO{
 
     MongoDatabase baseDatos;
     MongoCollection<Document> coleccion;
-    int idSistemaGenerado = 1;
     
     public ClienteDAO() {
         this.baseDatos = Conexion.getConexion();
@@ -41,11 +37,10 @@ public class ClienteDAO implements IClienteDAO{
     @Override
     public Cliente insertar(Cliente insertarCliente) throws PersistenciaException {
         
-       insertarCliente.setIdSistema(this.idSistemaGenerado);
+
         Document clienteDocument = new Document();
         try {
-            clienteDocument.append("idSistema", insertarCliente.getIdSistema())
-                    .append("nombre", insertarCliente.getNombre())
+            clienteDocument.append("nombre", insertarCliente.getNombre())
                     .append("direccion", insertarCliente.getDireccion())
                     .append("telefono", insertarCliente.getTelefono());
 
@@ -57,8 +52,6 @@ public class ClienteDAO implements IClienteDAO{
         } catch (Exception e) {
             throw new PersistenciaException("Error al insertar cliente:" + e.getMessage());
         }
-
-        this.idSistemaGenerado++;
         
         return insertarCliente;
     }
@@ -108,10 +101,6 @@ public class ClienteDAO implements IClienteDAO{
         return eliminarCliente;
     }
 
-    @Override
-    public List<Cliente> obtenerTodosLosHoteles() throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 
     /**
      * 
@@ -128,7 +117,6 @@ public class ClienteDAO implements IClienteDAO{
            
             return new Cliente(
                     cliente.getObjectId("_id"),
-                    cliente.getInteger("idSistema"),
                     cliente.getString("nombre"),
                     cliente.getString("direccion"),
                     cliente.getString("telefono")
@@ -142,20 +130,19 @@ public class ClienteDAO implements IClienteDAO{
 
     /**
      * 
-     * @param idSistema
+     * @param nombre
      * @return
      * @throws PersistenciaException 
      */
     @Override
-    public Cliente buscar(int  idSistema) throws PersistenciaException {
-        Document filtro = new Document("idSistema", idSistema);
+    public Cliente buscar(String  nombre) throws PersistenciaException {
+        Document filtro = new Document("nombre", nombre);
         
         try{
             Document cliente = coleccion.find(filtro).first();
             
             return new Cliente(
                     cliente.getObjectId("_id"),
-                    cliente.getInteger("idSistema"),
                     cliente.getString("nombre"),
                     cliente.getString("direccion"),
                     cliente.getString("telefono")
