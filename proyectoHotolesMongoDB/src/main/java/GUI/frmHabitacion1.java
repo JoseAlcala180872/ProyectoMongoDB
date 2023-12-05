@@ -234,9 +234,9 @@ public class frmHabitacion1 extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_btnCalcularActionPerformed
-    
+
     /**
-     * @return 
+     * @return
      */
     public Integer obtenerPeriodo() {
         LocalDate fechaSeleccionadaInicial = calendarioFechaInicial.getSelectedDate();
@@ -264,6 +264,22 @@ public class frmHabitacion1 extends javax.swing.JFrame {
      * @return
      */
     public double calcularTarifa() {
+        // Verificar si el hotel está seleccionado
+        if (hotelSeleccionado == null) {
+            mostrarError("Selecciona un hotel antes de calcular la tarifa.");
+            return 0.0; // Otra opción es lanzar una excepción o manejar el error de otra manera
+        }
+
+        // Verificar las fechas
+        LocalDate fechaActual = LocalDate.now();
+        LocalDate fechaInicial = calendarioFechaInicial.getSelectedDate();
+        LocalDate fechaFinal = calendarioFechaFinal.getSelectedDate();
+
+        if (fechaInicial == null || fechaFinal == null || fechaInicial.isBefore(fechaActual) || fechaFinal.isBefore(fechaInicial) || fechaFinal.isEqual(fechaInicial)) {
+            mostrarError("Verifica las fechas para calcular la tarifa.");
+            return 0.0; // Otra opción es lanzar una excepción o manejar el error de otra manera
+        }
+
         Integer dias = this.obtenerPeriodo();
         int indiceHabitacion = tablaHabitacion.getSelectedRow();
 
@@ -275,10 +291,10 @@ public class frmHabitacion1 extends javax.swing.JFrame {
         System.out.println("" + precioNeto + dias);
         return precioNeto;
     }
-    
+
     /**
-     * 
-     * @param mensaje 
+     *
+     * @param mensaje
      */
     private void mostrarError(String mensaje) {
         JOptionPane.showMessageDialog(errorPanel, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
